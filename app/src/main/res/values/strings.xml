@@ -6,8 +6,10 @@
     <string name="diagnosis_en">Diagnosis:</string>
     <string name="medication_en">Medication:</string>
     <string name="schedule_en">My schedule</string>
-    <string name="health_en">My health</string>
+    <string name="my_profile_en">My profile</string>
     <string name="records_en">My records</string>
     <string name="settings_en">Settings</string>
     <string name="logout_en">Logout</string>
+    <string name="open_en">Open</string>
+    <string name="close_en">Close</string>
 </resources>
