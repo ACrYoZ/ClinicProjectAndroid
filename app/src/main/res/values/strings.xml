@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">myClinic</string>
+    <string name="unknownUser_en">Unknown User</string>
+    <string name="age_en">Age:</string>
+    <string name="adress_en">Adress:</string>
+    <string name="diagnosis_en">Diagnosis:</string>
+    <string name="medication_en">Medication:</string>
+    <string name="schedule_en">My schedule</string>
+    <string name="health_en">My health</string>
+    <string name="records_en">My records</string>
+    <string name="settings_en">Settings</string>
+    <string name="logout_en">Logout</string>
+</resources>
