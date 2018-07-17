@@ -1,6 +1,7 @@
 package com.clinic.myclinic.Activities;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ public class UserProfileActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private NavigationView navView;
 
     private Toolbar mToolbar;
 
@@ -61,14 +64,26 @@ public class UserProfileActivity extends AppCompatActivity
                 "Haven't Medication"
         );
 
+        //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
 
+        //инициализируем нашу шторку
         mDrawerLayout = findViewById(R.id.drawer_layout_user_profile);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open_en, R.string.close_en);
 
+        navView = findViewById(R.id.nav_view_user_profile);
+
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        //получаем ссылки на элементы с header
+        View hView = navView.getHeaderView(0);
+        userPhotoNavigationDrawer = hView.findViewById(R.id.imgUserNavigationDrawer);
+        userEmail = hView.findViewById(R.id.txtUserEmailNavigationDrawer);
+        userNameNavigationDrawer = hView.findViewById(R.id.txtUserNameNavigationDrawer);
+
+        navView.setNavigationItemSelectedListener(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -80,22 +95,17 @@ public class UserProfileActivity extends AppCompatActivity
         userDiagnosis = findViewById(R.id.txtDiagnosisText);
         userMedication = findViewById(R.id.txtMedicationText);
 
-        //Для Navigation Drawer TODO: пофиксить. Ошибка с тем, что элементы находятся в другом layout. Как до них достучаться?
-        //userPhotoNavigationDrawer = findViewById(R.id.imgUserNavigationDrawer);
-        //userEmail = findViewById(R.id.txtUserEmailNavigationDrawer);
-        //userNameNavigationDrawer = findViewById(R.id.txtUserNameNavigationDrawer);
-
         //Устанавливаем картинку из интернета TODO: временное решение. Переделать чтобы грузилась с сервера
         Picasso.get()
                 .load(user.getUserPhoto())
                 .resize(100, 100)
                 .centerCrop()
                 .into(userPhoto);
-       // Picasso.get()
-       //         .load(user.getUserPhoto())
-       //         .resize(100, 100)
-       //         .centerCrop()
-       //         .into(userPhotoNavigationDrawer);
+         Picasso.get()
+                 .load(user.getUserPhoto())
+                 .resize(100, 100)
+                 .centerCrop()
+                 .into(userPhotoNavigationDrawer);
 
 
         userName.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
@@ -103,8 +113,8 @@ public class UserProfileActivity extends AppCompatActivity
         userAdress.setText(user.getUserAdress());
         userDiagnosis.setText(user.getUserDiagnosis());
         userMedication.setText(user.getUserMedication());
-//      userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
-//      userEmail.setText(user.getUserEmail());
+        userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
+        userEmail.setText(user.getUserEmail());
     }//onCreate
 
     private void startRecordsActivity(){
@@ -135,8 +145,10 @@ public class UserProfileActivity extends AppCompatActivity
                 break;
             case R.id.nav_my_schedules:
                 startRecordsActivity();
+                break;
             case R.id.nav_logout:
                 onLogout();
+                break;
             case R.id.nav_settings:
                 break;
         }
