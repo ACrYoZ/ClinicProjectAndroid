@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
+import com.clinic.myclinic.Utils.CircularTransformation;
 import com.squareup.picasso.Picasso;
 
 import es.dmoral.toasty.Toasty;
@@ -100,11 +101,13 @@ public class UserProfileActivity extends AppCompatActivity
                 .load(user.getUserPhoto())
                 .resize(100, 100)
                 .centerCrop()
+                .transform(new CircularTransformation())
                 .into(userPhoto);
          Picasso.get()
                  .load(user.getUserPhoto())
                  .resize(100, 100)
                  .centerCrop()
+                 .transform(new CircularTransformation())
                  .into(userPhotoNavigationDrawer);
 
 

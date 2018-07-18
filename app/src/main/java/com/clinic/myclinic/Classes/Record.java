@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class Record {
     String doctorName, cause;   //Имя доктора и причина записи
-    Date dateTime;              //Дата и время записи
+    String dateTime;              //Дата и время записи
 
-    public Record(String doctorName, String cause, Date dateTime) {
+    public Record(String doctorName, String cause, String dateTime) {
         this.doctorName = doctorName;
         this.cause = cause;
         this.dateTime = dateTime;
@@ -28,11 +28,11 @@ public class Record {
         this.cause = cause;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 }

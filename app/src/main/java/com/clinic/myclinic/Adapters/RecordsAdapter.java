@@ -17,7 +17,7 @@ import at.markushi.ui.CircleButton;
 public class RecordsAdapter extends ArrayAdapter<Record> {
     private LayoutInflater inflater;             // для загрузки разметки элемента
     private int layout;                          // идентфикатор файла разметки
-    private ArrayList<Record> records;              // коллекция выводимых данных
+    private ArrayList<Record> records;           // коллекция выводимых данных
 
     public RecordsAdapter(Context context, int res, ArrayList<Record> records){
         super(context, res, records);
