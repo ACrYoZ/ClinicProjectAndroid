@@ -108,7 +108,7 @@ public class RecordsActivity extends AppCompatActivity
 
 
 
-        adapter = new RecordsAdapter(this, R.id.lvRecords, records);
+        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
 
         ListView lvRecords = findViewById(R.id.lvRecords);
         lvRecords.setAdapter(adapter);
@@ -174,6 +174,4 @@ public class RecordsActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 }

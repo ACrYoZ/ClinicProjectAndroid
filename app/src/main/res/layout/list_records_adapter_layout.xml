@@ -16,13 +16,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtDateTime"
+                android:id="@+id/txtDoctor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/txtDoctor"
+                android:id="@+id/txtDateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -44,7 +44,7 @@
             android:layout_width="55dip"
             android:layout_height="55dip"
             android:src="@drawable/ic_clear_white_48dp"
-            app:cb_color="@color/colorAccent"
+            app:cb_color="@color/Red"
             app:cb_pressedRingWidth="8dip" />
 
     </LinearLayout>

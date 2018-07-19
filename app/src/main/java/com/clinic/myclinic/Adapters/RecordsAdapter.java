@@ -1,6 +1,7 @@
 package com.clinic.myclinic.Adapters;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class RecordsAdapter extends ArrayAdapter<Record> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(final int position, View convertView, ViewGroup parent){
         View view = inflater.inflate(this.layout, parent, false);
 
         //Ссылки элементов
