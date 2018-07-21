@@ -23,6 +23,30 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/container_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/container_body"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="6dp"
+            app:fabSize="normal"
+            android:src="@drawable/ic_add_black_24dp"
+
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:rippleColor="#F06292"/>
+
+
+    </FrameLayout>
+
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

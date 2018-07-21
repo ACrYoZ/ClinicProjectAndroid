@@ -12,4 +12,11 @@
     <string name="logout_en">Logout</string>
     <string name="open_en">Open</string>
     <string name="close_en">Close</string>
+    <string name="accept_en">Accept</string>
+    <string name="cancel_en">Cancel</string>
+    <string name="select_the_doctor_en">Select the doctor:</string>
+    <string name="cause_en">Cause:</string>
+    <string name="select_date_en">Select date:</string>
+    <string name="select_avaliable_time_en">Select time:</string>
+    <string name="confirm_en">Confirm</string>
 </resources>

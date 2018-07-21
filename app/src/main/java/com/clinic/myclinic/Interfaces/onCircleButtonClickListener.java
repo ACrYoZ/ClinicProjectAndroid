@@ -1,4 +1,5 @@
 package com.clinic.myclinic.Interfaces;
 
-public interface CircleButtonClickListener {
-}
+import android.view.View;
+
+public interface onCircleButtonClickListener { void onCircleButtonClick(View view, int position); }

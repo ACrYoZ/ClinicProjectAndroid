@@ -11,14 +11,24 @@ import android.widget.TextView;
 import com.clinic.myclinic.Classes.Record;
 
 import java.util.ArrayList;
+
+import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
 import com.clinic.myclinic.R;
 
 import at.markushi.ui.CircleButton;
 
-public class RecordsAdapter extends ArrayAdapter<Record> {
+public class RecordsAdapter extends ArrayAdapter<Record>
+                            implements onCircleButtonClickListener{
     private LayoutInflater inflater;             // для загрузки разметки элемента
     private int layout;                          // идентфикатор файла разметки
     private ArrayList<Record> records;           // коллекция выводимых данных
+
+    // создаем сам интерфейс callback и указываем метод и передаваемые им аргументы
+    // View на котором произошло событие и позиция этого View
+
+
+    // создаем поле объекта-колбэка
+    private static onCircleButtonClickListener cbListener;
 
     public RecordsAdapter(Context context, int res, ArrayList<Record> records){
         super(context, res, records);
@@ -41,6 +51,14 @@ public class RecordsAdapter extends ArrayAdapter<Record> {
         //ссылка на объект записей
         final Record item = records.get(position);
 
+        cbReject.setOnClickListener(v -> {
+            Snackbar snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("OK", v1 -> {
+                rejectSchedule(records.get(position));
+                cbListener.onCircleButtonClick(v, position);
+            });
+            snackbar.show();
+        });
 
         txtDoctorName.setText(item.getDoctorName());
         txtDateTime.setText(item.getDateTime().toString());
@@ -48,5 +66,19 @@ public class RecordsAdapter extends ArrayAdapter<Record> {
 
         //ссылка на готовый элемент
         return view;
+    }
+
+    // метод-сеттер для привязки колбэка к получателю событий
+    public void setOnCircleButtonClickListener(onCircleButtonClickListener listener) {
+        cbListener = listener;
+    }
+
+    //TODO: реализовать отмену записи (запрос в регистратуру)
+    private void rejectSchedule(Record record) {
+    }
+
+    @Override
+    public void onCircleButtonClick(View view, int position) {
+
     }
 }

@@ -1,7 +1,7 @@
 package com.clinic.myclinic.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,13 +25,14 @@ import com.clinic.myclinic.Utils.CircularTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.Arrays;
 
 import es.dmoral.toasty.Toasty;
 
+import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
+
 public class RecordsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -38,9 +40,13 @@ public class RecordsActivity extends AppCompatActivity
 
     private Toolbar mToolbar;
 
+    boolean flag;   //Вспомогательная переменная-флаг для слушателя OnScrollListener
+
     //Объявляем компоненты интерфейса
     ImageView userPhotoNavigationDrawer;
     TextView userEmail, userNameNavigationDrawer;
+    ListView lvRecords;
+    FloatingActionButton fab;
 
     //Объявляем пользователя
     User user = null;
@@ -54,9 +60,32 @@ public class RecordsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-        records = new ArrayList<Record>();
-        records.add(new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"));
-        records.add(new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"));
+        records = new ArrayList<>(Arrays.asList(
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Афонасенко Д.Д.", "Перелом ноги", "30.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
+                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
+                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018")
+        ));
 
 
         //Создание пользователя TODO: должен получать данные с сервера, не вручную заполнять. И вообще, получать из старой активности или Presistant Storage
@@ -107,12 +136,48 @@ public class RecordsActivity extends AppCompatActivity
         userEmail.setText(user.getUserEmail());
 
 
+        //Получаем FAB
+        fab = findViewById(R.id.fab_add);
+
+        //Устанавливаем слушателя клика по нашей FAB TODO: Допилить
+        fab.setOnClickListener(v -> {
+            startAddNewRecordActivity();
+        });
 
         adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
 
-        ListView lvRecords = findViewById(R.id.lvRecords);
+        lvRecords = findViewById(R.id.lvRecords);
+
+        // подписываем нашу активити на события колбэка
+        adapter.setOnCircleButtonClickListener(this);
         lvRecords.setAdapter(adapter);
+
+        //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
+        lvRecords.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    fab.animate().scaleX(1f).scaleY(1f).start();
+                    flag = true;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (flag){
+                    fab.animate().scaleX(0f).scaleY(0f).start();
+                    flag = false;
+                }
+            }
+        });
+
         Toasty.info(this, "Адаптер установлен", 100, true).show();
+    }
+
+    private void startAddNewRecordActivity() {
+        Intent intent = new Intent(this, AddANewRecordActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void startUserProfileActivity() {
@@ -144,7 +209,7 @@ public class RecordsActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout_user_profile);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout_records);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -173,5 +238,13 @@ public class RecordsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_records);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onCircleButtonClick(View view, final int position) {
+        records.remove(position);
+        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
+        adapter.notifyDataSetChanged();
+        lvRecords.setAdapter(adapter);
     }
 }
