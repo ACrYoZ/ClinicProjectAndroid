@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/change_pass_key"
+        android:summary="@string/pref_summary_change_user_password_en"
+        android:title="@string/pref_title_change_user_password_en"/>
+    <ListPreference
+        android:key="@string/change_lang_key"
+        android:entries="@array/avaliable_languages"
+        android:entryValues="@array/avaliable_languages_values"
+        android:summary="@string/pref_summary_change_language_en"
+        android:title="@string/pref_title_change_language_en"/>
+</PreferenceScreen>

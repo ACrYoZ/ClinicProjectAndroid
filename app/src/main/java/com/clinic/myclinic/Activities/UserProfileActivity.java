@@ -9,21 +9,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.clinic.myclinic.Classes.User;
+import com.clinic.myclinic.Interfaces.LanguageInterface;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
+import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.squareup.picasso.Picasso;
 
 import es.dmoral.toasty.Toasty;
 
 public class UserProfileActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                   LanguageInterface {
+
+    private String language;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -33,7 +39,8 @@ public class UserProfileActivity extends AppCompatActivity
 
     //Объявляем компоненты интерфейса
     ImageView userPhoto, userPhotoNavigationDrawer;
-    TextView userName, userAge, userAdress, userDiagnosis, userMedication, userEmail, userNameNavigationDrawer;
+    TextView userName, userAge, userAdress, userDiagnosis, userMedication, userEmail, userNameNavigationDrawer,
+             txtAge, txtAdress, txtDiagnosis, txtMedication;
 
 
     //Объявляем пользователя
@@ -95,6 +102,10 @@ public class UserProfileActivity extends AppCompatActivity
         userAdress = findViewById(R.id.txtAdressFull);
         userDiagnosis = findViewById(R.id.txtDiagnosisText);
         userMedication = findViewById(R.id.txtMedicationText);
+        txtAge = findViewById(R.id.txtAge);
+        txtAdress = findViewById(R.id.txtAdress);
+        txtDiagnosis = findViewById(R.id.txtDiagnosis);
+        txtMedication = findViewById(R.id.txtMedication);
 
         //Устанавливаем картинку из интернета TODO: временное решение. Переделать чтобы грузилась с сервера
         Picasso.get()
@@ -118,12 +129,41 @@ public class UserProfileActivity extends AppCompatActivity
         userMedication.setText(user.getUserMedication());
         userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
         userEmail.setText(user.getUserEmail());
+
+        //Получаем актуальный язык
+        language = PersistantStorageUtils.getLanguagePreferences(this);
+
+        //Устанавливаем актуальный язык
+        switch (language){
+            case "ru":
+                setRussianLocale();
+                break;
+        }
     }//onCreate
+
+    protected void onResume(){
+        language = PersistantStorageUtils.getLanguagePreferences(this);
+        //Устанавливаем актуальный язык
+        switch (language){
+            case "en":
+                setEnglishLocale();
+                break;
+            case "ru":
+                setRussianLocale();
+                break;
+        }
+        super.onResume();
+    }
 
     private void startRecordsActivity(){
         Intent intent = new Intent(this, RecordsActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void startSettingsActivity() {
+        Intent intent = new Intent(this, PreferencesActivity.class);
+        startActivity(intent);
     }
 
     //Если пользователь не авторизован - завершаем главную активность
@@ -153,9 +193,9 @@ public class UserProfileActivity extends AppCompatActivity
                 onLogout();
                 break;
             case R.id.nav_settings:
+                startSettingsActivity();
                 break;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user_profile);
         drawer.closeDrawer(GravityCompat.START);
@@ -182,5 +222,33 @@ public class UserProfileActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setRussianLocale() {
+        txtAge.setText(R.string.age_ru);
+        txtAdress.setText(R.string.adress_ru);
+        txtDiagnosis.setText(R.string.diagnosis_ru);
+        txtMedication.setText(R.string.medication_ru);
+    }
 
+    @Override
+    public void setEnglishLocale() {
+        txtAge.setText(R.string.age_en);
+        txtAdress.setText(R.string.adress_en);
+        txtDiagnosis.setText(R.string.diagnosis_en);
+        txtMedication.setText(R.string.medication_en);
+    }
+
+    //TODO: решить проблему с вылетами. Не находит пункты меню
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        switch (language){
+//            case "ru":
+//                menu.findItem(R.id.nav_my_account).setTitle(R.string.my_profile_ru);
+//                menu.findItem(R.id.nav_logout).setTitle(R.string.logout_ru);
+//                menu.findItem(R.id.nav_my_schedules).setTitle(R.string.schedule_ru);
+//                menu.findItem(R.id.nav_settings).setTitle(R.string.settings_ru);
+//                break;
+//        }
+//        return super.onPrepareOptionsMenu(menu);
+//    }
 }
