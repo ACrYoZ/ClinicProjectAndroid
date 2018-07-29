@@ -1,5 +1,7 @@
 package com.clinic.myclinic.Classes;
 
+import android.support.annotation.Nullable;
+
 public class User {
     private String userEmail;
     private String userPassword;
@@ -9,8 +11,8 @@ public class User {
     private String userName;
     private String userSurname;
     private String userPatronymic;
-    private String userDiagnosis;
-    private String userMedication;
+   @Nullable private String userDiagnosis;
+   @Nullable private String userMedication;
 
     //Constructors
     public User(String userEmail, String userPassword, String userPhoto, String userName,
@@ -29,6 +31,7 @@ public class User {
     }
 
     public User() {
+
     }
 
     //Getters and Setters

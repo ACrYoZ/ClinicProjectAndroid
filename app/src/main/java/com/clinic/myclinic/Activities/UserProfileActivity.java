@@ -29,6 +29,8 @@ public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                    LanguageInterface {
 
+    public final static String SERVER = "myclinic.ddns.net:8080";
+
     private String language;
 
     private DrawerLayout mDrawerLayout;
@@ -58,19 +60,19 @@ public class UserProfileActivity extends AppCompatActivity
         }//if
 
         //Создание пользователя TODO: должен получать данные с сервера, не вручную заполнять
-        user = new User(
-                //TODO: E-mail и Passowrd получать не из сервера, а из presistant storage. Или всё же сервер?
-                "mrtvzat2013@yandex.com",
-                "ch",
-                "https://pp.userapi.com/c836731/v836731946/4d031/i8MtY2l3c5Q.jpg",
-                "Vladislav",
-                "Tarapata",
-                "Valeriyevich",
-                "18",
-                "Gertsina 12-B",
-                "Good Health",
-                "Haven't Medication"
-        );
+//        user = new User(
+//                //TODO: E-mail и Passowrd получать не из сервера, а из presistant storage. Или всё же сервер?
+//                AuthorizationUtils.getEmail(this),
+//                AuthorizationUtils.getPassword(this),
+//                "https://pp.userapi.com/c836731/v836731946/4d031/i8MtY2l3c5Q.jpg",
+//                "Vladislav",
+//                "Tarapata",
+//                "Valeriyevich",
+//                "18",
+//                "Gertsina 12-B",
+//                "Good Health",
+//                "Haven't Medication"
+//        );
 
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);
