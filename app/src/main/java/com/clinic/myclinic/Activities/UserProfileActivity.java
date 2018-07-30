@@ -23,6 +23,8 @@ import com.clinic.myclinic.Utils.CircularTransformation;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.TimeUnit;
+
 import es.dmoral.toasty.Toasty;
 
 public class UserProfileActivity extends AppCompatActivity
@@ -59,20 +61,17 @@ public class UserProfileActivity extends AppCompatActivity
             return;
         }//if
 
-        //Создание пользователя TODO: должен получать данные с сервера, не вручную заполнять
-//        user = new User(
-//                //TODO: E-mail и Passowrd получать не из сервера, а из presistant storage. Или всё же сервер?
-//                AuthorizationUtils.getEmail(this),
-//                AuthorizationUtils.getPassword(this),
-//                "https://pp.userapi.com/c836731/v836731946/4d031/i8MtY2l3c5Q.jpg",
-//                "Vladislav",
-//                "Tarapata",
-//                "Valeriyevich",
-//                "18",
-//                "Gertsina 12-B",
-//                "Good Health",
-//                "Haven't Medication"
-//        );
+        //Создание пользователя
+        user = new User(this);
+        //Нереально дикий костыль времен динозавров.TODO: исправить
+        //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
+        //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
+        // инициализирует ещё не существующие элементы класса User
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);

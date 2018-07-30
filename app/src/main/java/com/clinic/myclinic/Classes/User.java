@@ -1,10 +1,49 @@
 package com.clinic.myclinic.Classes;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.EditText;
+
+import com.clinic.myclinic.Activities.UserProfileActivity;
+import com.clinic.myclinic.Utils.AuthorizationUtils;
+import com.clinic.myclinic.Utils.JSONParser;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
+    JSONParser jsonParser = new JSONParser();
+
+    Context context;
+
+    //адрес
+    private static String url_get_patient_data = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_patient_data.php";
+
+    //теги узлов JSON
+    private static final String TAG_LOGIN = "login";
+    private static final String TAG_PASSWORD = "password";
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_CONTENT = "content";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_PATRONYMIC = "patronymic";
+    private static final String TAG_SURNAME = "surname";
+    private static final String TAG_AGE = "age";
+    private static final String TAG_ADRESS = "adress";
+    private static final String TAG_DIAGNOSIS = "diagnosis";
+    private static final String TAG_MEDICATION = "medication";
+    private static final String TAG_USER = "user";
+
+    //Поля данных о пользователе
     private String userEmail;
-    private String userPassword;
     private String userAge;
     private String userAdress;
     private String userPhoto;
@@ -15,11 +54,10 @@ public class User {
    @Nullable private String userMedication;
 
     //Constructors
-    public User(String userEmail, String userPassword, String userPhoto, String userName,
+    public User(String userEmail, String userPhoto, String userName,
                 String userSurname, String userPatronymic, String userAge,String userAdress,
                 String userDiagnosis, String userMedication) {
         this.userEmail = userEmail;
-        this.userPassword = userPassword;
         this.userPhoto = userPhoto;
         this.userName = userName;
         this.userSurname = userSurname;
@@ -30,8 +68,10 @@ public class User {
         this.userAdress = userAdress;
     }
 
-    public User() {
-
+    //Конструктор получающий данные с сервера
+    public User(Context ctx) {
+        context = ctx;
+        new GetUserDataTask().execute();
     }
 
     //Getters and Setters
@@ -91,10 +131,6 @@ public class User {
         this.userMedication = userMedication;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
     public String getUserAge() {
         return userAge;
     }
@@ -111,12 +147,47 @@ public class User {
         this.userAdress = userAdress;
     }
 
-    //Методы для получения данных о пользователе с сервера. TODO: реализовать получение данных о пользователе с сервера.
-    private String getUserPhotoSrv(){ return null; }
-    private String getUserNameSrv(){ return null; }
-    private String getUserSurnameSrv(){ return null; }
-    private String getUserPatronymicSrv(){ return null; }
-    private String getUserDiagnosisSrv(){ return null; }
-    private String getUserMedicationSrv(){ return null; }
+    // AsyncTask для получения информации о пользователе
+    class GetUserDataTask extends AsyncTask<String, String, String> {
 
+        protected String doInBackground(String... args) {
+            // проверяем тег success
+            int success;
+            try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair(TAG_LOGIN, AuthorizationUtils.getEmail(context)));
+                params.add(new BasicNameValuePair(TAG_PASSWORD, AuthorizationUtils.getPassword(context)));
+
+                // получаем информацию через запрос HTTP GET
+                JSONObject json = jsonParser.makeHttpRequest(url_get_patient_data, "GET", params);
+
+                // ответ от json о товаре
+                Log.d("User Data Json", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    // если получили информацию о пользователе
+                    JSONArray userObj = json.getJSONArray(TAG_USER);
+
+                    // получим первый объект из массива JSON Array и установим необходимые поля
+                    JSONObject user = userObj.getJSONObject(0);
+                    userEmail = AuthorizationUtils.getEmail(context);
+                    userAge = user.getString(TAG_AGE);
+                    userAdress = user.getString(TAG_ADRESS);
+                    userPhoto = user.getString(TAG_CONTENT);
+                    userName = user.getString(TAG_NAME);
+                    userSurname = user.getString(TAG_SURNAME);
+                    userPatronymic = user.getString(TAG_PATRONYMIC);
+                    userMedication = user.getString(TAG_MEDICATION);
+                    userDiagnosis = user.getString(TAG_DIAGNOSIS);
+                } else {
+                    // не нашли товар по pid
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 }

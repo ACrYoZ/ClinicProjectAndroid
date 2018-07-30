@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClick(View v){
         //Проверяем, существует ли пользователь и корректен ли e-mail
-        if(isValidEmail(edtUserName.getText().toString())
+        if(isValidEmail(edtUserName.getText().toString()) && edtPassword.getText().toString() != null
            && userExist.checkForUserExist(edtUserName.getText().toString(), edtPassword.getText().toString())){
             Log.i("AuthorizationUtils","User exist");
             //Записываем login & password пользователя

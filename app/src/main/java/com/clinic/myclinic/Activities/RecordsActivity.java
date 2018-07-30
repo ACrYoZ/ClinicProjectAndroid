@@ -91,7 +91,6 @@ public class RecordsActivity extends AppCompatActivity
         //Создание пользователя TODO: должен получать данные с сервера, не вручную заполнять. И вообще, получать из старой активности или Presistant Storage
         user = new User(
                 "mrtvzat2013@yandex.com",
-                "ch",
                 "https://pp.userapi.com/c836731/v836731946/4d031/i8MtY2l3c5Q.jpg",
                 "Vladislav",
                 "Tarapata",
