@@ -1,14 +1,12 @@
 package com.clinic.myclinic.Classes;
 
-import java.util.Date;
-
 public class Record {
-    String doctorName, cause;   //Имя доктора и причина записи
+    String doctorName, annotation;     //Имя доктора и причина записи
     String dateTime;              //Дата и время записи
 
-    public Record(String doctorName, String cause, String dateTime) {
+    public Record(String doctorName, String annotation, String dateTime) {
         this.doctorName = doctorName;
-        this.cause = cause;
+        this.annotation = annotation;
         this.dateTime = dateTime;
     }
 
@@ -20,12 +18,12 @@ public class Record {
         this.doctorName = doctorName;
     }
 
-    public String getCause() {
-        return cause;
+    public String getAnnotation() {
+        return annotation;
     }
 
-    public void setCause(String cause) {
-        this.cause = cause;
+    public void setAnnotation(String annotation) {
+        this.annotation = annotation;
     }
 
     public String getDateTime() {

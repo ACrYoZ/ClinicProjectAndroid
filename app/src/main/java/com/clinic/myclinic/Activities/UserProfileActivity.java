@@ -63,15 +63,13 @@ public class UserProfileActivity extends AppCompatActivity
 
         //Создание пользователя
         user = new User(this);
+        //user = new User("1", "1", "1", "1", "1", "1", "1", "1", "1");
         //Нереально дикий костыль времен динозавров.TODO: исправить
         //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
         //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
-        // инициализирует ещё не существующие элементы класса User
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        //инициализирует ещё не существующие элементы класса User
+        try { TimeUnit.SECONDS.sleep(1); }
+        catch (Exception e){ e.printStackTrace(); }
 
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);

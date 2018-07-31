@@ -62,7 +62,7 @@ public class RecordsAdapter extends ArrayAdapter<Record>
 
         txtDoctorName.setText(item.getDoctorName());
         txtDateTime.setText(item.getDateTime().toString());
-        txtCause.setText(item.getCause());
+        txtCause.setText(item.getAnnotation());
 
         //ссылка на готовый элемент
         return view;

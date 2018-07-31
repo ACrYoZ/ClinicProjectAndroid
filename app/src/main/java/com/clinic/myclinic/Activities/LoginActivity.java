@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
 
@@ -54,8 +55,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClick(View v){
         //Проверяем, существует ли пользователь и корректен ли e-mail
+        boolean isExist = userExist.checkForUserExist(edtUserName.getText().toString(), edtPassword.getText().toString());
+        //Нереально дикий костыль времен динозавров.TODO: исправить
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         if(isValidEmail(edtUserName.getText().toString()) && edtPassword.getText().toString() != null
-           && userExist.checkForUserExist(edtUserName.getText().toString(), edtPassword.getText().toString())){
+           && isExist){
             Log.i("AuthorizationUtils","User exist");
             //Записываем login & password пользователя
             AuthorizationUtils.setEmail(this, edtUserName.getText().toString());

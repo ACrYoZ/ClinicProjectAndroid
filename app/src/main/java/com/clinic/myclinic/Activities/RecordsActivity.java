@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.clinic.myclinic.Adapters.RecordsAdapter;
 import com.clinic.myclinic.Classes.Record;
+import com.clinic.myclinic.Classes.Records;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
@@ -26,13 +27,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
 
 import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
 
 public class RecordsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener {//onCircleButtonClickListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -52,7 +54,7 @@ public class RecordsActivity extends AppCompatActivity
     User user = null;
 
     RecordsAdapter adapter;
-    ArrayList<Record> records;
+    Records records;
 
 
     @Override
@@ -60,46 +62,18 @@ public class RecordsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-        records = new ArrayList<>(Arrays.asList(
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Афонасенко Д.Д.", "Перелом ноги", "30.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018"),
-                new Record("Темченко Е.А.", "Звон в ушах", "24.07.2018"),
-                new Record("Божко Н.Н.", "Беспокоит головная боль", "18.07.2018")
-        ));
+        //Создание пользователя
+        user = new User(this);
+        //user = new User("1", "1", "1", "1", "1", "1", "1", "1", "1");
+        //Создание списка записей пользователя
+        records = new Records(this);
 
-
-        //Создание пользователя TODO: должен получать данные с сервера, не вручную заполнять. И вообще, получать из старой активности или Presistant Storage
-        user = new User(
-                "mrtvzat2013@yandex.com",
-                "https://pp.userapi.com/c836731/v836731946/4d031/i8MtY2l3c5Q.jpg",
-                "Vladislav",
-                "Tarapata",
-                "Valeriyevich",
-                "18",
-                "Gertsina 12-B",
-                "Good Health",
-                "Haven't Medication"
-        );
+        //Нереально дикий костыль времен динозавров.TODO: исправить
+        //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
+        //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
+        //инициализирует ещё не существующие элементы класса User
+        try { TimeUnit.SECONDS.sleep(1); }
+        catch (Exception e){ e.printStackTrace(); }
 
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);
@@ -143,12 +117,13 @@ public class RecordsActivity extends AppCompatActivity
             startAddNewRecordActivity();
         });
 
-        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
+        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
 
         lvRecords = findViewById(R.id.lvRecords);
 
         // подписываем нашу активити на события колбэка
-        adapter.setOnCircleButtonClickListener(this);
+        //TODO: раскоментить
+        //adapter.setOnCircleButtonClickListener(this);
         lvRecords.setAdapter(adapter);
 
         //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
@@ -238,12 +213,12 @@ public class RecordsActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    @Override
-    public void onCircleButtonClick(View view, final int position) {
-        records.remove(position);
-        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
-        adapter.notifyDataSetChanged();
-        lvRecords.setAdapter(adapter);
-    }
+    //TODO: запилить удаление записи
+//    @Override
+//    public void onCircleButtonClick(View view, final int position) {
+//        records.remove(position);
+//        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
+//        adapter.notifyDataSetChanged();
+//        lvRecords.setAdapter(adapter);
+//    }
 }

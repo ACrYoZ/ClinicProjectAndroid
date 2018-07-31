@@ -161,7 +161,7 @@ public class User {
                 // получаем информацию через запрос HTTP GET
                 JSONObject json = jsonParser.makeHttpRequest(url_get_patient_data, "GET", params);
 
-                // ответ от json о товаре
+                // ответ от json о пользователе
                 Log.d("User Data Json", json.toString());
 
                 // json success tag
@@ -182,11 +182,9 @@ public class User {
                     userMedication = user.getString(TAG_MEDICATION);
                     userDiagnosis = user.getString(TAG_DIAGNOSIS);
                 } else {
-                    // не нашли товар по pid
+                    // не нашли пользователя
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }
     }
