@@ -25,19 +25,23 @@ public class Records {
 
     //адрес
     private static String url_get_records = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_patient_records.php";
+    private static String url_remove_record = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/remove_record.php";
 
     //теги узлов JSON
     private static final String TAG_LOGIN = "login";
     private static final String TAG_PASSWORD = "password";
     private static final String TAG_SUCCESS = "success";
+    private static final String TAG_RID = "rid";
     private static final String TAG_RECORDS = "records";
     private static final String TAG_NAME = "name";
     private static final String TAG_PATRONYMIC = "patronymic";
     private static final String TAG_SURNAME = "surname";
     private static final String TAG_ANNOTATION = "annotation";
     private static final String TAG_DATE = "date";
+    private static final String TAG_MESSAGE = "message";
 
     @Nullable ArrayList<Record> records = null;
+    Record recordToRemove = null;
 
     //Constructor
     public Records(Context ctx) {
@@ -49,7 +53,7 @@ public class Records {
     @Nullable
     public ArrayList<Record> getRecords() { return records; }
 
-    // AsyncTask для получения информации о пользователе
+    // AsyncTask для получения записей
     class GetRecordsTask extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
@@ -82,10 +86,51 @@ public class Records {
                         String surname = user.getString(TAG_SURNAME);
                         String annotation = user.getString(TAG_ANNOTATION);
                         String date = user.getString(TAG_DATE);
+                        int id = user.getInt(TAG_RID);
 
-                        records.add(new Record(name + " " + patronymic + " " + surname, annotation, date));
+                        records.add(new Record(name + " " + patronymic + " " + surname, annotation, date, id));
                     }
                 } else {}
+            } catch (JSONException e) { e.printStackTrace(); }
+            return null;
+        }
+    }
+
+    public void removeRecordAt(int index){
+        //Удаляем с сервера
+        recordToRemove = records.get(index);
+        new RemoveRecord().execute();
+
+        //Удаляем из списска дабы не обращаться повторно к серверу за обновленными данными
+        records.remove(index);
+    }//removeRecordAt
+
+    // AsyncTask для получения записей
+    class RemoveRecord extends AsyncTask<String, String, String> {
+
+        protected String doInBackground(String... args) {
+            // проверяем тег success
+            int success;
+            try {
+                //переводим id в строку
+                StringBuffer sb = new StringBuffer();
+                sb.append(recordToRemove.getId());
+
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair(TAG_RID, sb.toString()));
+
+                // получаем информацию через запрос HTTP GET
+                JSONObject jsonRecords = jsonParser.makeHttpRequest(url_remove_record, "POST", params);
+
+                String message = jsonRecords.getString(TAG_MESSAGE);
+                // ответ от json о записях
+                Log.d("Remove Records JSON", message);
+
+                // json success tag
+                success = jsonRecords.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                        Log.i("SERVER: ", "Your record successfully removed");
+                    } else { Log.i("SERVER: ", "Something went wrong...");}
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }

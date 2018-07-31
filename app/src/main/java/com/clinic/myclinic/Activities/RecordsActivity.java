@@ -34,7 +34,7 @@ import es.dmoral.toasty.Toasty;
 import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
 
 public class RecordsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {//onCircleButtonClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -64,7 +64,6 @@ public class RecordsActivity extends AppCompatActivity
 
         //Создание пользователя
         user = new User(this);
-        //user = new User("1", "1", "1", "1", "1", "1", "1", "1", "1");
         //Создание списка записей пользователя
         records = new Records(this);
 
@@ -122,8 +121,7 @@ public class RecordsActivity extends AppCompatActivity
         lvRecords = findViewById(R.id.lvRecords);
 
         // подписываем нашу активити на события колбэка
-        //TODO: раскоментить
-        //adapter.setOnCircleButtonClickListener(this);
+        adapter.setOnCircleButtonClickListener(this);
         lvRecords.setAdapter(adapter);
 
         //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
@@ -214,11 +212,11 @@ public class RecordsActivity extends AppCompatActivity
         return true;
     }
     //TODO: запилить удаление записи
-//    @Override
-//    public void onCircleButtonClick(View view, final int position) {
-//        records.remove(position);
-//        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records);
-//        adapter.notifyDataSetChanged();
-//        lvRecords.setAdapter(adapter);
-//    }
+    @Override
+    public void onCircleButtonClick(View view, final int position) {
+        records.removeRecordAt(position);
+        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
+        adapter.notifyDataSetChanged();
+        lvRecords.setAdapter(adapter);
+    }
 }
