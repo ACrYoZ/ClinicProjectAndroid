@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean isExist = userExist.checkForUserExist(edtUserName.getText().toString(), edtPassword.getText().toString());
         //Нереально дикий костыль времен динозавров.TODO: исправить
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(2);
         }catch (Exception e){
             e.printStackTrace();
         }

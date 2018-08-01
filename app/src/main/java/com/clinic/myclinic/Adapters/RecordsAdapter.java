@@ -54,7 +54,6 @@ public class RecordsAdapter extends ArrayAdapter<Record>
         cbReject.setOnClickListener(v -> {
             Snackbar snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_INDEFINITE);
             snackbar.setAction("OK", v1 -> {
-                rejectSchedule(records.get(position));
                 cbListener.onCircleButtonClick(v, position);
             });
             snackbar.show();
@@ -71,10 +70,6 @@ public class RecordsAdapter extends ArrayAdapter<Record>
     // метод-сеттер для привязки колбэка к получателю событий
     public void setOnCircleButtonClickListener(onCircleButtonClickListener listener) {
         cbListener = listener;
-    }
-
-    //TODO: реализовать отмену записи (запрос в регистратуру)
-    private void rejectSchedule(Record record) {
     }
 
     @Override

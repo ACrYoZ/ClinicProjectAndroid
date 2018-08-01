@@ -3,7 +3,7 @@ package com.clinic.myclinic.Classes;
 public class Record {
     String doctorName, annotation;     //Имя доктора и причина записи
     String dateTime;                   //Дата и время записи
-    private int id;                            //id записи в бд
+    private int id;                    //id записи в бд
 
     public Record(String doctorName, String annotation, String dateTime, int id) {
         this.doctorName = doctorName;

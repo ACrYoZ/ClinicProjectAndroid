@@ -16,8 +16,8 @@
     <string name="accept_en">Accept</string>
     <string name="cancel_en">Cancel</string>
     <string name="select_the_doctor_en">Select the doctor:</string>
-    <string name="cause_en">Cause:</string>
-    <string name="select_date_en">Select date:</string>
+    <string name="cause_en">Annotation:</string>
+    <string name="select_date_en">Select date</string>
     <string name="select_avaliable_time_en">Select time:</string>
     <string name="confirm_en">Confirm</string>
     <string name="pref_title_change_user_password_en">Change ypur password</string>
@@ -53,6 +53,9 @@
 
     <string name="change_pass_key">PREF_CHANGE_USER_PASSWORD</string>
     <string name="change_lang_key">PREF_CHANGE_LANGUAGE</string>
+    <string name="selected_date_en">Selected date</string>
+    <string name="selected_time_en">Selected time</string>
+    <string name="select_category_en">Select category:</string>
 
     <string-array name="avaliable_languages">
         <item>English</item>

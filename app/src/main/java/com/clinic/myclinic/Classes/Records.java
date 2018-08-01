@@ -54,7 +54,7 @@ public class Records {
     public ArrayList<Record> getRecords() { return records; }
 
     // AsyncTask для получения записей
-    class GetRecordsTask extends AsyncTask<String, String, String> {
+    private class GetRecordsTask extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
             // проверяем тег success
@@ -106,7 +106,7 @@ public class Records {
     }//removeRecordAt
 
     // AsyncTask для получения записей
-    class RemoveRecord extends AsyncTask<String, String, String> {
+    private class RemoveRecord extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
             // проверяем тег success
@@ -130,7 +130,7 @@ public class Records {
                 success = jsonRecords.getInt(TAG_SUCCESS);
                 if (success == 1) {
                         Log.i("SERVER: ", "Your record successfully removed");
-                    } else { Log.i("SERVER: ", "Something went wrong...");}
+                    } else { Log.e("SERVER: ", "Something went wrong...");}
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }

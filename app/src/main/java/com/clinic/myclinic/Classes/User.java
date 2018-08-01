@@ -148,7 +148,7 @@ public class User {
     }
 
     // AsyncTask для получения информации о пользователе
-    class GetUserDataTask extends AsyncTask<String, String, String> {
+    private class GetUserDataTask extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
             // проверяем тег success

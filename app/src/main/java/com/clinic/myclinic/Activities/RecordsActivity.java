@@ -111,7 +111,7 @@ public class RecordsActivity extends AppCompatActivity
         //Получаем FAB
         fab = findViewById(R.id.fab_add);
 
-        //Устанавливаем слушателя клика по нашей FAB TODO: Допилить
+        //Устанавливаем слушателя клика по нашей FAB
         fab.setOnClickListener(v -> {
             startAddNewRecordActivity();
         });
@@ -211,7 +211,7 @@ public class RecordsActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    //TODO: запилить удаление записи
+
     @Override
     public void onCircleButtonClick(View view, final int position) {
         records.removeRecordAt(position);

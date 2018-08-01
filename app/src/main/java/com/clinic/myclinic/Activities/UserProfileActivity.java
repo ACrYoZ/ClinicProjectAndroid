@@ -105,7 +105,7 @@ public class UserProfileActivity extends AppCompatActivity
         txtDiagnosis = findViewById(R.id.txtDiagnosis);
         txtMedication = findViewById(R.id.txtMedication);
 
-        //Устанавливаем картинку из интернета TODO: временное решение. Переделать чтобы грузилась с сервера
+        //Устанавливаем картинку из интернета TODO: работает с интернет-картинками, нужно проверить как он с сервером работает
         Picasso.get()
                 .load(user.getUserPhoto())
                 .resize(100, 100)
