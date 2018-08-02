@@ -51,10 +51,10 @@ public class AddANewRecordActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getCategories());
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategory.setAdapter(adapterCategory);
-        spCategory.setSelection(0);
         spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 String selectedCategorie = spCategory.getSelectedItem().toString();
                 setAdapterForDoctorsSP(selectedCategorie);
                 spDoctors.setEnabled(true);
@@ -73,13 +73,12 @@ public class AddANewRecordActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterDoc = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getNames(selectedCategorie));
         adapterDoc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDoctors.setAdapter(adapterDoc);
-        spDoctors.setSelection(0);
         spDoctors.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected_doc_name = spTimeSelecter.getSelectedItem().toString();
-                //setAdapterForTimeSelectionSP(selected_doc_name);
-                //spTimeSelecter.setEnabled(true);
+                String selected_doc_name = spDoctors.getSelectedItem().toString();
+                setAdapterForTimeSelectionSP(selected_doc_name, position);
+                spTimeSelecter.setEnabled(true);
             }
 
             @Override
@@ -89,13 +88,14 @@ public class AddANewRecordActivity extends AppCompatActivity {
         });
     }
 
+
     //TODO: сделать!
-//    private void setAdapterForTimeSelectionSP(String doc_name) {
-//        //Адаптер для времени
-//        ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getTimeDuty(doc_name));
-//
-//        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spTimeSelecter.setAdapter(adapterTimes);
-//        spTimeSelecter.setSelection(0);
-//    }
+    private void setAdapterForTimeSelectionSP(String doc_name, int pos) {
+        //Адаптер для времени
+        ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getTimeDuty(doc_name, pos));
+
+        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spTimeSelecter.setAdapter(adapterTimes);
+        spTimeSelecter.setSelection(0);
+    }
 }
