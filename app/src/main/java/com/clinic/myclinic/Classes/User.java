@@ -29,6 +29,7 @@ public class User {
     private static String url_get_patient_data = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_patient_data.php";
 
     //теги узлов JSON
+    private static final String TAG_UID = "pid";
     private static final String TAG_LOGIN = "login";
     private static final String TAG_PASSWORD = "password";
     private static final String TAG_SUCCESS = "success";
@@ -43,6 +44,7 @@ public class User {
     private static final String TAG_USER = "user";
 
     //Поля данных о пользователе
+    private int id;
     private String userEmail;
     private String userAge;
     private String userAdress;
@@ -54,9 +56,10 @@ public class User {
    @Nullable private String userMedication;
 
     //Constructors
-    public User(String userEmail, String userPhoto, String userName,
+    public User(int id, String userEmail, String userPhoto, String userName,
                 String userSurname, String userPatronymic, String userAge,String userAdress,
                 String userDiagnosis, String userMedication) {
+        this.id = id;
         this.userEmail = userEmail;
         this.userPhoto = userPhoto;
         this.userName = userName;
@@ -75,6 +78,11 @@ public class User {
     }
 
     //Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
     public String getUserEmail() {
         return userEmail;
     }
@@ -172,6 +180,7 @@ public class User {
 
                     // получим первый объект из массива JSON Array и установим необходимые поля
                     JSONObject user = userObj.getJSONObject(0);
+                    id = user.getInt(TAG_UID);
                     userEmail = AuthorizationUtils.getEmail(context);
                     userAge = user.getString(TAG_AGE);
                     userAdress = user.getString(TAG_ADRESS);

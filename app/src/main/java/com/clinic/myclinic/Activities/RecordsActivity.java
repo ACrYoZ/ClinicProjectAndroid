@@ -149,7 +149,6 @@ public class RecordsActivity extends AppCompatActivity
     private void startAddNewRecordActivity() {
         Intent intent = new Intent(this, AddANewRecordActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void startUserProfileActivity() {

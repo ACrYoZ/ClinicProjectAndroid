@@ -64,8 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textLongMessage"
-            android:text="@string/cause_en" />
+            android:hint="@string/cause_en"
+            android:inputType="textLongMessage" />
 
     </LinearLayout>
 
@@ -79,29 +79,29 @@
             android:id="@+id/txtSelectedTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
+            android:layout_weight="0"
             android:text="@string/selected_date_en" />
 
-        <Button
-            android:id="@+id/btnSelectTime"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/spDateSelecter"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/select_date_en"
-            android:textAlignment="center"
-            android:textStyle="italic" />
+            android:layout_marginLeft="5dp"
+            android:layout_weight="8" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/txtSelectedDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_weight="0.01"
             android:text="@string/selected_time_en" />
 
         <Spinner
@@ -122,6 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/add_record_linear_layout"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:text="@string/confirm_en" />
     </LinearLayout>

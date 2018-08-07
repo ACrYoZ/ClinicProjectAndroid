@@ -25,7 +25,6 @@ public class Doctors {
     //адрес
     private static String url_get_doctors = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_doctors.php";
     private static String url_get_categories = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_categories.php";
-    private static String url_get_journal = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_journal.php";
 
     //теги узлов JSON
     private static final String TAG_LOGIN = "login";
@@ -41,15 +40,11 @@ public class Doctors {
     private static final String TAG_DUTY_TO = "to";
     private static final String TAG_CATEG_NAME = "categname";
     private static final String TAG_CATEGORIES = "categories";
-    private static final String TAG_JOURNAL = "journal";
-    private static final String TAG_DOCID = "docid";
-    private static final String TAG_DATE = "date";
     private static final String TAG_MESSAGE = "message";
 
     ArrayList<Doctor> doctors = null;
     ArrayList<String> categories = null;
     ArrayList<String> names = null;
-    EngagedTimes timesEngag;
     int doc_position;
 
     public Doctors(Context ctx) {
@@ -157,7 +152,6 @@ public class Doctors {
         return categories.toArray(arr);
     }
 
-    //Не работает TODO: Починить
     public String[] getNames(String categorie) {
         names = new ArrayList<String>();
         for (Doctor doctor : doctors) {
@@ -170,7 +164,14 @@ public class Doctors {
         return names.toArray(arr);
     }
 
+    public String getDoctorIDByName(String name){
+     int id = 0;
 
+        for (Doctor doc : doctors) {
+            if(doc.getName().equals(name)){ id = doc.getId(); }
+        }
+        return Integer.toString(id);
+    }
 
     public String[] getTimeDuty(String doc_name, int doc_postition) {
         this.doc_position = doc_postition;
@@ -180,38 +181,80 @@ public class Doctors {
         String[] newtimes = new String[newTimeDutyList.size()];
 
         for (Doctor f : doctors) {
-            if (f.getName() == doc_name) {
+            if (f.getName().equals(doc_name)) {
                 doc = f;
 
                 String from, to;
                 from = doc.getFrom();
                 to = doc.getTo();
 
-                timesEngag = new EngagedTimes(context, doc_postition);
-                //TODO: исправить
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                int fromi, toi;
 
-                int fromi = Integer.parseInt(from.substring(11, 12));
-                String  engagedToi;
+                int tmp;
+                tmp = Integer.parseInt(from.substring(11, 13));
+                if(tmp == 0) { fromi = Integer.parseInt(from.substring(12, 13)); } else { fromi = tmp; }
+
+                tmp = Integer.parseInt(to.substring(11, 13));
+                if(tmp == 0) { toi = Integer.parseInt(from.substring(12, 13)); } else { toi = tmp; }
+
                 StringBuilder sb;
 
-                for (int toi = Integer.parseInt(to.substring(11, 12)); toi >= fromi; toi--) {
-                    for (int i = 0; i < timesEngag.times.size(); i++) {
+                for (int i = toi-1; i >= fromi; i--) {
                         sb = new StringBuilder();
-                        sb.append(toi + ":" + "00" + ":" + "00");
-                        engagedToi = timesEngag.times.get(i).datetime;
+                        if(i < 10){
+                            sb.append("0" + i + ":" + "00" + ":" + "00");
+                        } else {
+                            sb.append(i + ":" + "00" + ":" + "00");
+                        }
 
-                        if (sb.equals(engagedToi)) { newTimeDutyList.add(sb.toString()); }
-                    }
+                        newTimeDutyList.add(sb.toString());
                 }
                 newtimes = new String[newTimeDutyList.size()];
             }
         }
         return newTimeDutyList.toArray(newtimes);
+    }
+
+    public String[] getDateDuty(String doc_name, int doc_postition) {
+        this.doc_position = doc_postition;
+
+        Doctor doc;
+        ArrayList<String> newDateDutyList = new ArrayList<String>();
+        String[] newdates = new String[newDateDutyList.size()];
+
+        for (Doctor f : doctors) {
+            if (f.getName().equals(doc_name)) {
+                doc = f;
+
+                String from, to;
+                from = doc.getFrom();
+                to = doc.getTo();
+
+                int fromi, toi;
+
+                int tmp;
+                tmp = Integer.parseInt(from.substring(8, 10));
+                if(tmp == 0) { fromi = Integer.parseInt(from.substring(9, 10)); } else { fromi = tmp; }
+
+                tmp = Integer.parseInt(to.substring(8, 10));
+                if(tmp == 0) { toi = Integer.parseInt(from.substring(9, 10)); } else { toi = tmp; }
+
+                StringBuilder sb;
+                String template = from.substring(0, 8);
+
+                for (int i = toi; i >= fromi; i--) {
+                    sb = new StringBuilder();
+                    if(i < 10) {
+                        sb.append(template + "0" + i);
+                    } else {
+                        sb.append(template + i);
+                    }
+                    newDateDutyList.add(sb.toString());
+                }
+                newdates = new String[newDateDutyList.size()];
+            }
+        }
+        return newDateDutyList.toArray(newdates);
     }
 }
 
