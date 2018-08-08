@@ -1,8 +1,12 @@
 package com.clinic.myclinic.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +27,7 @@ import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
+import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,6 +49,8 @@ public class RecordsActivity extends AppCompatActivity
 
     boolean flag;   //Вспомогательная переменная-флаг для слушателя OnScrollListener
 
+    public  String language;
+
     //Объявляем компоненты интерфейса
     ImageView userPhotoNavigationDrawer;
     TextView userEmail, userNameNavigationDrawer;
@@ -62,17 +69,42 @@ public class RecordsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-        //Создание пользователя
-        user = new User(this);
-        //Создание списка записей пользователя
-        records = new Records(this);
+        //Получаем актуальный язык
+        language = PersistantStorageUtils.getLanguagePreferences(this);
 
-        //Нереально дикий костыль времен динозавров.TODO: исправить
-        //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
-        //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
-        //инициализирует ещё не существующие элементы класса User
-        try { TimeUnit.SECONDS.sleep(1); }
-        catch (Exception e){ e.printStackTrace(); }
+        if(isOnline()) {
+
+            //Создание пользователя
+            user = new User(this);
+            //Создание списка записей пользователя
+            records = new Records(this);
+
+            //Нереально дикий костыль времен динозавров.TODO: исправить
+            //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
+            //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
+            //инициализирует ещё не существующие элементы класса User
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            user = new User(0, null, null, "Unknown User", null,
+                    null, null, null, null, null);
+            if(language.equals("ru")) {
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            }
+        }
 
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);
@@ -107,7 +139,6 @@ public class RecordsActivity extends AppCompatActivity
         userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
         userEmail.setText(user.getUserEmail());
 
-
         //Получаем FAB
         fab = findViewById(R.id.fab_add);
 
@@ -116,34 +147,34 @@ public class RecordsActivity extends AppCompatActivity
             startAddNewRecordActivity();
         });
 
-        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
+        if(records != null) {
+            adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
 
-        lvRecords = findViewById(R.id.lvRecords);
+            lvRecords = findViewById(R.id.lvRecords);
 
-        // подписываем нашу активити на события колбэка
-        adapter.setOnCircleButtonClickListener(this);
-        lvRecords.setAdapter(adapter);
+            // подписываем нашу активити на события колбэка
+            adapter.setOnCircleButtonClickListener(this);
+            lvRecords.setAdapter(adapter);
 
-        //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
-        lvRecords.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (scrollState == SCROLL_STATE_IDLE) {
-                    fab.animate().scaleX(1f).scaleY(1f).start();
-                    flag = true;
+            //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
+            lvRecords.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                    if (scrollState == SCROLL_STATE_IDLE) {
+                        fab.animate().scaleX(1f).scaleY(1f).start();
+                        flag = true;
+                    }
                 }
-            }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (flag){
-                    fab.animate().scaleX(0f).scaleY(0f).start();
-                    flag = false;
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    if (flag) {
+                        fab.animate().scaleX(0f).scaleY(0f).start();
+                        flag = false;
+                    }
                 }
-            }
-        });
-
-        Toasty.info(this, "Адаптер установлен", 100, true).show();
+            });
+        }
     }
 
     private void startAddNewRecordActivity() {
@@ -203,6 +234,7 @@ public class RecordsActivity extends AppCompatActivity
                 onLogout();
                 break;
             case R.id.nav_settings:
+                startSettingsActivity();
                 break;
         }
 
@@ -217,5 +249,17 @@ public class RecordsActivity extends AppCompatActivity
         adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
         adapter.notifyDataSetChanged();
         lvRecords.setAdapter(adapter);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void startSettingsActivity() {
+        Intent intent = new Intent(this, PreferencesActivity.class);
+        startActivity(intent);
     }
 }

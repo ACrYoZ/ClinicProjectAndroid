@@ -1,22 +1,24 @@
 package com.clinic.myclinic.Activities;
 
+import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.clinic.myclinic.Classes.User;
-import com.clinic.myclinic.Interfaces.LanguageInterface;
+import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
@@ -25,15 +27,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
-import es.dmoral.toasty.Toasty;
-
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                   LanguageInterface {
+        SettingsInterface {
 
     public final static String SERVER = "myclinic.ddns.net:8080";
 
-    private String language;
+    public  String language;
+    public  String textSize;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -55,20 +56,41 @@ public class UserProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+
+
         //Проверка. Авторизован ли пользователь? Нет? Выходим на активность входа.
         if (!AuthorizationUtils.isAuthorized(this)) {
             onLogout();
             return;
         }//if
 
-        //Создание пользователя
-        user = new User(this);
-        //Нереально дикий костыль времен динозавров.TODO: исправить
-        //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
-        //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
-        //инициализирует ещё не существующие элементы класса User
-        try { TimeUnit.SECONDS.sleep(1); }
-        catch (Exception e){ e.printStackTrace(); }
+        //Если сеть есть - берем данные с сервера. Если сети нет - создаем "null" пользователя
+        if(isOnline()) {
+            //Создание пользователя
+            user = new User(this);
+            //Нереально дикий костыль времен динозавров.TODO: исправить
+            //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
+            //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
+            //инициализирует ещё не существующие элементы класса User
+            try { TimeUnit.SECONDS.sleep(1); }
+            catch (Exception e){ e.printStackTrace(); }
+        } else {
+            user = new User(0, null, null, "Unknown User", null,
+                    null, null, null, null, null);
+            if(language.equals("ru")) {
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            }
+        }
 
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);
@@ -105,7 +127,6 @@ public class UserProfileActivity extends AppCompatActivity
         txtDiagnosis = findViewById(R.id.txtDiagnosis);
         txtMedication = findViewById(R.id.txtMedication);
 
-        //Устанавливаем картинку из интернета TODO: работает с интернет-картинками, нужно проверить как он с сервером работает
         Picasso.get()
                 .load(user.getUserPhoto())
                 .resize(100, 100)
@@ -136,7 +157,15 @@ public class UserProfileActivity extends AppCompatActivity
             case "ru":
                 setRussianLocale();
                 break;
+            case "en":
+                setEnglishLocale();
+                break;
         }
+
+        //Получаем актуальный размер шрифта
+        textSize = PersistantStorageUtils.getTextSizePreferences(this);
+        setTextSize();
+
     }//onCreate
 
     protected void onResume(){
@@ -150,6 +179,11 @@ public class UserProfileActivity extends AppCompatActivity
                 setRussianLocale();
                 break;
         }
+
+        //Устанавливаем актуальный размер шрифта
+        textSize = PersistantStorageUtils.getTextSizePreferences(this);
+        setTextSize();
+
         super.onResume();
     }
 
@@ -236,6 +270,20 @@ public class UserProfileActivity extends AppCompatActivity
         txtMedication.setText(R.string.medication_en);
     }
 
+    @Override
+    public void setTextSize() {
+        userName.setTextSize(Integer.parseInt(textSize));
+        userAge.setTextSize(Integer.parseInt(textSize));
+        userAdress.setTextSize(Integer.parseInt(textSize));
+        userDiagnosis.setTextSize(Integer.parseInt(textSize));
+        userMedication.setTextSize(Integer.parseInt(textSize));
+        txtAge.setTextSize(Integer.parseInt(textSize));
+        txtAdress.setTextSize(Integer.parseInt(textSize));
+        txtDiagnosis.setTextSize(Integer.parseInt(textSize));
+        txtMedication.setTextSize(Integer.parseInt(textSize));
+
+    }
+
     //TODO: решить проблему с вылетами. Не находит пункты меню
 //    @Override
 //    public boolean onPrepareOptionsMenu(Menu menu) {
@@ -249,4 +297,11 @@ public class UserProfileActivity extends AppCompatActivity
 //        }
 //        return super.onPrepareOptionsMenu(menu);
 //    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 }

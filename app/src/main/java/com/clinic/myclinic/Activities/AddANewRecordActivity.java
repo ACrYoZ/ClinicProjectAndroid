@@ -3,7 +3,10 @@ package com.clinic.myclinic.Activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +23,10 @@ import android.widget.Toast;
 
 import com.clinic.myclinic.Classes.Doctors;
 import com.clinic.myclinic.Classes.User;
+import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.JSONParser;
+import com.clinic.myclinic.Utils.PersistantStorageUtils;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -35,7 +40,11 @@ import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
 
-public class AddANewRecordActivity extends AppCompatActivity {
+public class AddANewRecordActivity extends AppCompatActivity
+                                   implements SettingsInterface{
+
+    public  String language;
+    public  String textSize;
 
     JSONParser jsonParser = new JSONParser();
     private static String url_send_record = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/send_record.php";
@@ -76,48 +85,111 @@ public class AddANewRecordActivity extends AppCompatActivity {
         edtAnnotation = findViewById(R.id.edtCause);
         btnConfirm = findViewById(R.id.btnConfirm);
 
-        user = new User(this);
-        doctors = new Doctors(this);
-
         spTimeSelecter.setEnabled(false);
         spDoctors.setEnabled(false);
         spDateSelecter.setEnabled(false);
 
-        //Адаптер для категорий
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getCategories());
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spCategory.setAdapter(adapterCategory);
-        spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //Получаем актуальный язык
+        language = PersistantStorageUtils.getLanguagePreferences(this);
 
-                String selectedCategorie = spCategory.getSelectedItem().toString();
-                setAdapterForDoctorsSP(selectedCategorie);
-                spDoctors.setEnabled(true);
+        //Устанавливаем актуальный язык
+        switch (language){
+            case "ru":
+                setRussianLocale();
+                break;
+            case "en":
+                setEnglishLocale();
+                break;
+        }
+
+        //Получаем актуальный размер шрифта
+        textSize = PersistantStorageUtils.getTextSizePreferences(this);
+        setTextSize();
+
+        if(isOnline()) {
+
+            user = new User(this);
+            doctors = new Doctors(this);
+
+            //Адаптер для категорий
+            ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getCategories());
+            adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spCategory.setAdapter(adapterCategory);
+            spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    String selectedCategorie = spCategory.getSelectedItem().toString();
+                    setAdapterForDoctorsSP(selectedCategorie);
+                    spDoctors.setEnabled(true);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    spTimeSelecter.setEnabled(false);
+                    spDoctors.setEnabled(false);
+                    spTimeSelecter.setEnabled(false);
+                }
+            });
+
+            btnConfirm.setOnClickListener(v -> {
+                if (edtAnnotation.getText().toString().length() > 5 &&
+                        spDateSelecter.getSelectedItem() != null &&
+                        spDoctors.getSelectedItem() != null &&
+                        spTimeSelecter.getSelectedItem() != null &&
+                        spCategory.getSelectedItem() != null) {
+                    new sendRecData().execute();
+                } else {
+                    Toasty.warning(this, "Не все поля заданы корректно", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            if(language.equals("ru")) {
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
             }
+            user = new User(0, null, null, "Unknown User", null,
+                    null, null, null, null, null);
+        }
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                spTimeSelecter.setEnabled(false);
-                spDoctors.setEnabled(false);
-                spTimeSelecter.setEnabled(false);
-            }
-        });
+    @Override
+    public void setRussianLocale() {
+        txtSelectCategory.setText(R.string.select_category_ru);
+        txtSelectDoctor.setText(R.string.select_the_doctor_ru);
+        txtSelectDate.setText(R.string.selected_date_ru);
+        txtSelectTime.setText(R.string.selected_time_ru);
+        edtAnnotation.setHint(R.string.cause_ru);
+        btnConfirm.setText(R.string.confirm_ru);
+    }
 
-        btnConfirm.setOnClickListener(v->{
-            if(edtAnnotation.getText().toString().length() > 5 &&
-               spDateSelecter.getSelectedItem() != null &&
-               spDoctors.getSelectedItem() != null &&
-               spTimeSelecter.getSelectedItem() != null &&
-               spCategory.getSelectedItem() != null){
-               new sendRecData().execute();
+    @Override
+    public void setEnglishLocale() {
+        txtSelectCategory.setText(R.string.select_category_en);
+        txtSelectDoctor.setText(R.string.select_the_doctor_en);
+        txtSelectDate.setText(R.string.selected_date_en);
+        txtSelectTime.setText(R.string.selected_time_en);
+        edtAnnotation.setHint(R.string.cause_en);
+        btnConfirm.setText(R.string.confirm_en);
+    }
 
-               //TODO: заменить
-                Toasty.info(ctx, "Ваша запись отправлена в регистратуру", Toast.LENGTH_SHORT).show();
-
-            }
-               else { Toasty.warning(this, "Не все поля заданы корректно", Toast.LENGTH_SHORT).show(); }
-        });
+    @Override
+    public void setTextSize() {
+        txtSelectCategory.setTextSize(Integer.parseInt(textSize));
+        txtSelectDoctor.setTextSize(Integer.parseInt(textSize));
+        txtSelectDate.setTextSize(Integer.parseInt(textSize));
+        txtSelectTime.setTextSize(Integer.parseInt(textSize));
+        edtAnnotation.setTextSize(Integer.parseInt(textSize));
+        btnConfirm.setTextSize(Integer.parseInt(textSize));
     }
 
     private class sendRecData extends AsyncTask<String, String, String> {
@@ -150,13 +222,11 @@ public class AddANewRecordActivity extends AppCompatActivity {
                 params.add(new BasicNameValuePair(TAG_ANNOTATION, edtAnnotation.getText().toString()));
 
                 // отправляем информацию через запрос HTTP POST
-                JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_record, "POST", params);
+                JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_record, "GET", params);
 
                 // ответ от json о записи
                 Log.d("AddRecord Json", jsonRecord.toString());
 
-                //TODO: не работает toast, нужно исправить
-                //Toasty.info(ctx, "Ваша запись отправлена в регистратуру", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -205,12 +275,17 @@ public class AddANewRecordActivity extends AppCompatActivity {
         spDateSelecter.setAdapter(adapterDates);
     }
 
-
-    //TODO: сделать!
     private void setAdapterForTimeSelectionSP(String doc_name, int pos) {
         //Адаптер для времени
         ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getTimeDuty(doc_name, pos));
         adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spTimeSelecter.setAdapter(adapterTimes);
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

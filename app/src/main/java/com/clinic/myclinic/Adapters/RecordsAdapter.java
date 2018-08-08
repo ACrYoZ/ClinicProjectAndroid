@@ -8,24 +8,29 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.clinic.myclinic.Activities.RecordsActivity;
 import com.clinic.myclinic.Classes.Record;
 
 import java.util.ArrayList;
 
+import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
 import com.clinic.myclinic.R;
+import com.clinic.myclinic.Utils.PersistantStorageUtils;
 
 import at.markushi.ui.CircleButton;
 
 public class RecordsAdapter extends ArrayAdapter<Record>
-                            implements onCircleButtonClickListener{
+                            implements onCircleButtonClickListener, SettingsInterface {
     private LayoutInflater inflater;             // для загрузки разметки элемента
     private int layout;                          // идентфикатор файла разметки
     private ArrayList<Record> records;           // коллекция выводимых данных
 
-    // создаем сам интерфейс callback и указываем метод и передаваемые им аргументы
-    // View на котором произошло событие и позиция этого View
+    TextView txtDoctorName, txtDateTime, txtCause;
 
+    public static String language;
+    public static String textSize;
+    Context ctx;
 
     // создаем поле объекта-колбэка
     private static onCircleButtonClickListener cbListener;
@@ -36,6 +41,7 @@ public class RecordsAdapter extends ArrayAdapter<Record>
         this.inflater = LayoutInflater.from(context);
         this.layout = res;
         this.records = records;
+        ctx = context;
     }
 
     @Override
@@ -43,9 +49,9 @@ public class RecordsAdapter extends ArrayAdapter<Record>
         View view = inflater.inflate(this.layout, parent, false);
 
         //Ссылки элементов
-        TextView txtDoctorName = view.findViewById(R.id.txtDoctor);
-        TextView txtDateTime = view.findViewById(R.id.txtDateTime);
-        TextView txtCause = view.findViewById(R.id.txtCause);
+        txtDoctorName = view.findViewById(R.id.txtDoctor);
+        txtDateTime = view.findViewById(R.id.txtDateTime);
+        txtCause = view.findViewById(R.id.txtCause);
         CircleButton cbReject = view.findViewById(R.id.cbReject);
 
         //ссылка на объект записей
@@ -63,6 +69,10 @@ public class RecordsAdapter extends ArrayAdapter<Record>
         txtDateTime.setText(item.getDateTime().toString());
         txtCause.setText(item.getAnnotation());
 
+        //Получаем актуальный размер шрифта
+        textSize = PersistantStorageUtils.getTextSizePreferences(ctx);
+        setTextSize();
+
         //ссылка на готовый элемент
         return view;
     }
@@ -75,5 +85,22 @@ public class RecordsAdapter extends ArrayAdapter<Record>
     @Override
     public void onCircleButtonClick(View view, int position) {
 
+    }
+
+    @Override
+    public void setRussianLocale() {
+
+    }
+
+    @Override
+    public void setEnglishLocale() {
+
+    }
+
+    @Override
+    public void setTextSize() {
+        txtDoctorName.setTextSize(Integer.parseInt(textSize));
+        txtDateTime.setTextSize(Integer.parseInt(textSize));
+        txtCause.setTextSize(Integer.parseInt(textSize));
     }
 }

@@ -15,6 +15,8 @@ public class PersistantStorageUtils {
     public static final String STORAGE_NAME = "StorageName";
     private static final String PREF_KEY_LANGUAGE = "PREF_CHANGE_LANGUAGE";
     private static final String PREF_DEF_LANGUAGE = "en";
+    private static final String PREF_DEF_TEXT_SIZE = "14";
+    private static final String PREF_KEY_TEXT_SIZE = "PREF_CHANGE_TXT_SIZE";
 
     private static SharedPreferences settings = null;
     private static SharedPreferences.Editor editor = null;
@@ -53,5 +55,10 @@ public class PersistantStorageUtils {
     public static String getLanguagePreferences(Context ctx){
         defaultPref = PreferenceManager.getDefaultSharedPreferences(ctx);
         return defaultPref.getString(PREF_KEY_LANGUAGE, PREF_DEF_LANGUAGE);
+    }
+
+    public static String getTextSizePreferences(Context ctx){
+        defaultPref = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return defaultPref.getString(PREF_KEY_TEXT_SIZE, PREF_DEF_TEXT_SIZE);
     }
 }

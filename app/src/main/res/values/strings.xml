@@ -11,6 +11,7 @@
     <string name="records_en">My records</string>
     <string name="settings_en">Settings</string>
     <string name="logout_en">Logout</string>
+    <string name="login_en">Login</string>
     <string name="open_en">Open</string>
     <string name="close_en">Close</string>
     <string name="accept_en">Accept</string>
@@ -20,12 +21,24 @@
     <string name="select_date_en">Select date</string>
     <string name="select_avaliable_time_en">Select time:</string>
     <string name="confirm_en">Confirm</string>
-    <string name="pref_title_change_user_password_en">Change ypur password</string>
-    <string name="pref_summary_change_user_password_en">Tap on this option if you want to change your password</string>
     <string name="pref_title_change_language_en">Language</string>
     <string name="pref_summary_change_language_en">Tap on this option if you want to change language</string>
+    <string name="pref_title_text_size_en">Change text size</string>
+    <string name="pref_summary_text_size_en">To change text size - tap here. Min text size - 14sp and max text size - 20sp</string>
+    <string name="pref_category_general_en">General</string>
+    <string name="offline_mode_en">No internet connection</string>
+    <string name="record_sending_en">Your record sended to the registry</string>
+    <string name="selected_date_en">Select date:</string>
+    <string name="selected_time_en">Select time:</string>
+    <string name="select_category_en">Select category:</string>
 
     //Значения на русском
+    <string name="pref_category_general_ru">Основные настройки</string>
+    <string name="offline_mode_ru">Нет интернет соединения</string>
+    <string name="record_sending_ru">Ваша запись отправлена в регистратуру</string>
+    <string name="selected_date_ru">Выберите дату:</string>
+    <string name="selected_time_ru">Выберите время:</string>
+    <string name="select_category_ru">Выберите категорию:</string>
     <string name="unknownUser_ru">Unknown User</string>
     <string name="age_ru">Возраст:</string>
     <string name="adress_ru">Адрес:</string>
@@ -36,6 +49,7 @@
     <string name="records_ru">Мои записи</string>
     <string name="settings_ru">Настройки</string>
     <string name="logout_ru">Выход</string>
+    <string name="login_ru">Вход</string>
     <string name="open_ru">Открыто</string>
     <string name="close_ru">Закрыто</string>
     <string name="accept_ru">Принять</string>
@@ -45,17 +59,15 @@
     <string name="select_date_ru">Выбирите дату:</string>
     <string name="select_avaliable_time_ru">Выберите:</string>
     <string name="confirm_ru">Подтвердить</string>
-    <string name="pref_title_change_user_password_ru">Изменить пароль</string>
-    <string name="pref_summary_change_user_password_ru">Выберите эту опцию если хотите изменить свой пароль</string>
     <string name="pref_title_change_language_ru">Язык</string>
     <string name="pref_summary_change_language_ru">Выберите эту опцию если хотите изменить язык</string>
+    <string name="pref_title_text_size_ru">Изменить размер шрифта</string>
+    <string name="pref_summary_text_size_ru">Чтобы изменить размер шрифта - нажмите тут. Минимальный размер - 14sp, максимальный - 20sp</string>
 
 
-    <string name="change_pass_key">PREF_CHANGE_USER_PASSWORD</string>
     <string name="change_lang_key">PREF_CHANGE_LANGUAGE</string>
-    <string name="selected_date_en">Selected date</string>
-    <string name="selected_time_en">Selected time</string>
-    <string name="select_category_en">Select category:</string>
+    <string name="change_txt_size_key">PREF_CHANGE_TXT_SIZE</string>
+
 
     <string-array name="avaliable_languages">
         <item>English</item>
@@ -65,6 +77,16 @@
     <string-array name="avaliable_languages_values">
         <item>en</item>
         <item>ru</item>
+    </string-array>
+
+    <string-array name="avaliable_text_sizes">
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
     </string-array>
 
 </resources>
