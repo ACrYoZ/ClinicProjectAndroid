@@ -1,5 +1,6 @@
 package com.clinic.myclinic.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,12 +35,15 @@ public class UserProfileActivity extends AppCompatActivity
 
     public final static String SERVER = "myclinic.ddns.net:8080";
 
+    private ProgressDialog pDialog;
     public  String language;
     public  String textSize;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
+    private Menu navMenu;
+    private MenuItem myacc, myschedule, mysettings, mylogout;
 
     private Toolbar mToolbar;
 
@@ -56,6 +61,8 @@ public class UserProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        //Получаем актуальный язык
+        language = PersistantStorageUtils.getLanguagePreferences(this);
 
 
         //Проверка. Авторизован ли пользователь? Нет? Выходим на активность входа.
@@ -78,13 +85,13 @@ public class UserProfileActivity extends AppCompatActivity
             user = new User(0, null, null, "Unknown User", null,
                     null, null, null, null, null);
             if(language.equals("ru")) {
-                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
                 snackbar.show();
             } else {
-                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
@@ -110,6 +117,7 @@ public class UserProfileActivity extends AppCompatActivity
         userPhotoNavigationDrawer = hView.findViewById(R.id.imgUserNavigationDrawer);
         userEmail = hView.findViewById(R.id.txtUserEmailNavigationDrawer);
         userNameNavigationDrawer = hView.findViewById(R.id.txtUserNameNavigationDrawer);
+        navMenu = navView.getMenu();
 
         navView.setNavigationItemSelectedListener(this);
 
@@ -126,6 +134,10 @@ public class UserProfileActivity extends AppCompatActivity
         txtAdress = findViewById(R.id.txtAdress);
         txtDiagnosis = findViewById(R.id.txtDiagnosis);
         txtMedication = findViewById(R.id.txtMedication);
+        myacc = navMenu.findItem(R.id.nav_my_account);
+        mylogout = navMenu.findItem(R.id.nav_logout);
+        myschedule = navMenu.findItem(R.id.nav_my_schedules);
+        mysettings = navMenu.findItem(R.id.nav_settings);
 
         Picasso.get()
                 .load(user.getUserPhoto())
@@ -148,9 +160,6 @@ public class UserProfileActivity extends AppCompatActivity
         userMedication.setText(user.getUserMedication());
         userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
         userEmail.setText(user.getUserEmail());
-
-        //Получаем актуальный язык
-        language = PersistantStorageUtils.getLanguagePreferences(this);
 
         //Устанавливаем актуальный язык
         switch (language){
@@ -260,6 +269,10 @@ public class UserProfileActivity extends AppCompatActivity
         txtAdress.setText(R.string.adress_ru);
         txtDiagnosis.setText(R.string.diagnosis_ru);
         txtMedication.setText(R.string.medication_ru);
+        myacc.setTitle(R.string.my_profile_ru);
+        mylogout.setTitle(R.string.logout_ru);
+        myschedule.setTitle(R.string.schedule_ru);
+        mysettings.setTitle(R.string.settings_ru);
     }
 
     @Override
@@ -268,6 +281,11 @@ public class UserProfileActivity extends AppCompatActivity
         txtAdress.setText(R.string.adress_en);
         txtDiagnosis.setText(R.string.diagnosis_en);
         txtMedication.setText(R.string.medication_en);
+
+        myacc.setTitle(R.string.my_profile_en);
+        mylogout.setTitle(R.string.logout_en);
+        myschedule.setTitle(R.string.schedule_en);
+        mysettings.setTitle(R.string.settings_en);
     }
 
     @Override
@@ -281,22 +299,7 @@ public class UserProfileActivity extends AppCompatActivity
         txtAdress.setTextSize(Integer.parseInt(textSize));
         txtDiagnosis.setTextSize(Integer.parseInt(textSize));
         txtMedication.setTextSize(Integer.parseInt(textSize));
-
     }
-
-    //TODO: решить проблему с вылетами. Не находит пункты меню
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        switch (language){
-//            case "ru":
-//                menu.findItem(R.id.nav_my_account).setTitle(R.string.my_profile_ru);
-//                menu.findItem(R.id.nav_logout).setTitle(R.string.logout_ru);
-//                menu.findItem(R.id.nav_my_schedules).setTitle(R.string.schedule_ru);
-//                menu.findItem(R.id.nav_settings).setTitle(R.string.settings_ru);
-//                break;
-//        }
-//        return super.onPrepareOptionsMenu(menu);
-//    }
 
     public boolean isOnline() {
         ConnectivityManager cm =

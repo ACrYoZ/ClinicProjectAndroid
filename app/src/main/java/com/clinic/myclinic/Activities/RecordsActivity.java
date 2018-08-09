@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -24,6 +25,7 @@ import com.clinic.myclinic.Adapters.RecordsAdapter;
 import com.clinic.myclinic.Classes.Record;
 import com.clinic.myclinic.Classes.Records;
 import com.clinic.myclinic.Classes.User;
+import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
@@ -39,11 +41,13 @@ import es.dmoral.toasty.Toasty;
 import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
 
 public class RecordsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener, SettingsInterface{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
+    private Menu navMenu;
+    private MenuItem myacc, myschedule, mysettings, mylogout;
 
     private Toolbar mToolbar;
 
@@ -92,13 +96,13 @@ public class RecordsActivity extends AppCompatActivity
             user = new User(0, null, null, "Unknown User", null,
                     null, null, null, null, null);
             if(language.equals("ru")) {
-                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
                 snackbar.show();
             } else {
-                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
@@ -124,6 +128,12 @@ public class RecordsActivity extends AppCompatActivity
         userPhotoNavigationDrawer = hView.findViewById(R.id.imgUserNavigationDrawer);
         userEmail = hView.findViewById(R.id.txtUserEmailNavigationDrawer);
         userNameNavigationDrawer = hView.findViewById(R.id.txtUserNameNavigationDrawer);
+        navMenu = navView.getMenu();
+
+        myacc = navMenu.findItem(R.id.nav_my_account);
+        mylogout = navMenu.findItem(R.id.nav_logout);
+        myschedule = navMenu.findItem(R.id.nav_my_schedules);
+        mysettings = navMenu.findItem(R.id.nav_settings);
 
         navView.setNavigationItemSelectedListener(this);
 
@@ -174,6 +184,16 @@ public class RecordsActivity extends AppCompatActivity
                     }
                 }
             });
+        }
+
+        //Устанавливаем актуальный язык
+        switch (language) {
+            case "ru":
+                setRussianLocale();
+                break;
+            case "en":
+                setEnglishLocale();
+                break;
         }
     }
 
@@ -262,4 +282,23 @@ public class RecordsActivity extends AppCompatActivity
         Intent intent = new Intent(this, PreferencesActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void setRussianLocale() {
+        myacc.setTitle(R.string.my_profile_ru);
+        mylogout.setTitle(R.string.logout_ru);
+        myschedule.setTitle(R.string.schedule_ru);
+        mysettings.setTitle(R.string.settings_ru);
+    }
+
+    @Override
+    public void setEnglishLocale() {
+        myacc.setTitle(R.string.my_profile_en);
+        mylogout.setTitle(R.string.logout_en);
+        myschedule.setTitle(R.string.schedule_en);
+        mysettings.setTitle(R.string.settings_en);
+    }
+
+    @Override
+    public void setTextSize() {}
 }

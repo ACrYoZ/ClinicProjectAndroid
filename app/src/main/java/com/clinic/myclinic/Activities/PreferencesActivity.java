@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 
 import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.R;
@@ -13,7 +14,8 @@ public class PreferencesActivity extends PreferenceActivity
                                  implements SettingsInterface{
 
     public  String language;
-    Preference pLanguage, pText, pGeneralCat;
+    PreferenceCategory pGeneralCat;
+    ListPreference pLanguage, pText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,22 +24,21 @@ public class PreferencesActivity extends PreferenceActivity
 
         PreferencesActivity pa = new PreferencesActivity();
 
-        pLanguage = pa.findPreference("PREF_CHANGE_LANGUAGE");
-        pText = pa.findPreference("PREF_CHANGE_TXT_SIZE");
-        pGeneralCat = pa.findPreference("GeneralCategoryKey");
+        pLanguage = (ListPreference) findPreference("PREF_CHANGE_LANGUAGE");
+        pText = (ListPreference) findPreference("PREF_CHANGE_TXT_SIZE");
+        pGeneralCat = (PreferenceCategory) findPreference("GeneralCategoryKey");
 
-        //Не работает смена языка TODO: исправить
-//        //Получаем актуальный язык
-//        language = PersistantStorageUtils.getLanguagePreferences(this);
-//
-//        switch (language){
-//            case "ru":
-//                setRussianLocale();
-//                break;
-//            case "en":
-//                setEnglishLocale();
-//                break;
-//        }
+        //Получаем актуальный язык
+        language = PersistantStorageUtils.getLanguagePreferences(this);
+
+        switch (language){
+            case "ru":
+                setRussianLocale();
+                break;
+            case "en":
+                setEnglishLocale();
+                break;
+        }
     }
 
     @Override
