@@ -17,6 +17,8 @@ public class PersistantStorageUtils {
     private static final String PREF_DEF_LANGUAGE = "en";
     private static final String PREF_DEF_TEXT_SIZE = "14";
     private static final String PREF_KEY_TEXT_SIZE = "PREF_CHANGE_TXT_SIZE";
+    private static final String PREF_KEY_TOKEN = "PREF_PERSONAL_TOKEN";
+    private static final String PREF_KEY_TOKEN_SENDED = "PREF_PERSONAL_TOKEN_SENDED";
 
     private static SharedPreferences settings = null;
     private static SharedPreferences.Editor editor = null;
@@ -45,7 +47,7 @@ public class PersistantStorageUtils {
     }
 
     //Получить параметр
-    public static String getProperty( String name ){
+    public static String getProperty( String name){
         if( settings == null ){
             init();
         }
@@ -60,5 +62,30 @@ public class PersistantStorageUtils {
     public static String getTextSizePreferences(Context ctx){
         defaultPref = PreferenceManager.getDefaultSharedPreferences(ctx);
         return defaultPref.getString(PREF_KEY_TEXT_SIZE, PREF_DEF_TEXT_SIZE);
+    }
+
+    public static void storeToken(String token, Context ctx){
+        ctx.getSharedPreferences(PREF_KEY_TOKEN, Context.MODE_PRIVATE)
+                .edit()
+                .putString(PREF_KEY_TOKEN, token)
+                .apply();
+    }
+
+    public static String getToken(Context ctx){
+        return ctx.getSharedPreferences(PREF_KEY_TOKEN, Context.MODE_PRIVATE)
+                .getString(PREF_KEY_TOKEN, null);
+    }
+
+    public static void storeTokenSended(boolean is_sended, Context ctx){
+        ctx.getSharedPreferences(PREF_KEY_TOKEN_SENDED, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(PREF_KEY_TOKEN_SENDED, is_sended)
+                .apply();
+    }
+
+    public static Boolean getTokenSended(Context ctx){
+        boolean def = false;
+        return ctx.getSharedPreferences(PREF_KEY_TOKEN_SENDED, Context.MODE_PRIVATE)
+                .getBoolean(PREF_KEY_TOKEN_SENDED, false);
     }
 }

@@ -30,6 +30,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -38,7 +39,7 @@ dependencies {
     //--- Toasty ---
     implementation 'com.android.support:cardview-v7:27.1.0'
     //-- Circle button widget --
-    compile 'com.github.markushi:circlebutton:1.1'
+    implementation 'com.github.markushi:circlebutton:1.1'
     //-- Circle button widget --
 
     // -- Picasso --
@@ -51,7 +52,7 @@ dependencies {
     //-- Navigation Drawer --
 
     //-- Apache --
-    compile 'org.apache.httpcomponents:httpcore:4.4.1'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.1'
     //-- Apache --
 
     //-- Material Calendar View --
@@ -60,3 +61,5 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

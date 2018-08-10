@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1096161401141",
+    "firebase_url": "https://myclinic-b21c4.firebaseio.com",
+    "project_id": "myclinic-b21c4",
+    "storage_bucket": "myclinic-b21c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096161401141:android:661cde3e719fc404",
+        "android_client_info": {
+          "package_name": "com.clinic.myclinic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096161401141-tieftoo4rsf7buh143v9bvhka5497fm0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.myclinic",
+            "certificate_hash": "76536bc6c0f562b3d89f9e1f92a6fddbd0eddeb2"
+          }
+        },
+        {
+          "client_id": "1096161401141-5j1mquk2i1jf1m5rp2p0bl15q0os2h71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSWu1aBRsQvr7DV-BxdlpFHGOrFlbCNRA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1096161401141-5j1mquk2i1jf1m5rp2p0bl15q0os2h71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

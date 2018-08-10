@@ -1,10 +1,10 @@
 package com.clinic.myclinic.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +25,16 @@ import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
+import com.clinic.myclinic.Utils.JSONParser;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class UserProfileActivity extends AppCompatActivity
@@ -35,7 +43,13 @@ public class UserProfileActivity extends AppCompatActivity
 
     public final static String SERVER = "myclinic.ddns.net:8080";
 
-    private ProgressDialog pDialog;
+    private static String url_send_fcm_token = "http://" + SERVER + "/AndroidScripts/send_fcm_token.php";
+
+    private static final String TAG_TOKEN = "token";
+    private static final String TAG_PID = "pid";
+
+    JSONParser jsonParser = new JSONParser();
+
     public  String language;
     public  String textSize;
 
@@ -81,6 +95,11 @@ public class UserProfileActivity extends AppCompatActivity
             //инициализирует ещё не существующие элементы класса User
             try { TimeUnit.SECONDS.sleep(1); }
             catch (Exception e){ e.printStackTrace(); }
+
+            //Если токен не был отправлен на сервер - отправляем
+            if(!PersistantStorageUtils.getTokenSended(this)){
+                PersistantStorageUtils.storeTokenSended(true, this);
+                new sendToken().execute(); }
         } else {
             user = new User(0, null, null, "Unknown User", null,
                     null, null, null, null, null);
@@ -151,7 +170,6 @@ public class UserProfileActivity extends AppCompatActivity
                  .centerCrop()
                  .transform(new CircularTransformation())
                  .into(userPhotoNavigationDrawer);
-
 
         userName.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
         userAge.setText(user.getUserAge());
@@ -243,7 +261,6 @@ public class UserProfileActivity extends AppCompatActivity
         return true;
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout_user_profile);
@@ -307,4 +324,28 @@ public class UserProfileActivity extends AppCompatActivity
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+    private class sendToken extends AsyncTask<String, String, String> {
+
+        protected String doInBackground(String... strings) {
+            try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                //Устанавливаем параметры
+                params.add(new BasicNameValuePair(TAG_PID, Integer.toString(user.getId())));
+                params.add(new BasicNameValuePair(TAG_TOKEN, PersistantStorageUtils.getToken(getApplicationContext())));
+
+                // отправляем информацию через запрос HTTP POST
+                JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_fcm_token, "GET", params);
+
+                // ответ от json о записи
+                Log.d("fcm", jsonRecord.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
 }
