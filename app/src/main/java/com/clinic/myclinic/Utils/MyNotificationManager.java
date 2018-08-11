@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.clinic.myclinic.R;
@@ -37,6 +40,8 @@ public class MyNotificationManager {
                                             .setContentIntent(pendingIntent)
                                             .setContentTitle(from)
                                             .setContentText(notification)
+                //TODO: не работает звук уведомления.
+                                            .setDefaults(Notification.DEFAULT_SOUND)
                                             .setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.heart))
                                             .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
                                             .setLights(Color.RED, 3000, 3000)

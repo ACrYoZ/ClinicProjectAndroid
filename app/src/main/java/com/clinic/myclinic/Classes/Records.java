@@ -1,11 +1,15 @@
 package com.clinic.myclinic.Classes;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 
 import com.clinic.myclinic.Activities.UserProfileActivity;
+import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.JSONParser;
 
@@ -32,6 +36,8 @@ public class Records {
     private static final String TAG_PASSWORD = "password";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_RID = "rid";
+    private static final String TAG_UID = "uid";
+    private static final String TAG_COUNT_DISAGREE = "disagree";
     private static final String TAG_RECORDS = "records";
     private static final String TAG_NAME = "name";
     private static final String TAG_PATRONYMIC = "patronymic";
@@ -39,9 +45,13 @@ public class Records {
     private static final String TAG_ANNOTATION = "annotation";
     private static final String TAG_DATE = "date";
     private static final String TAG_MESSAGE = "message";
+    private static final int MAX_DISAGREES = 15;
 
     @Nullable ArrayList<Record> records = null;
     Record recordToRemove = null;
+
+    int countDisagree;
+    int uid;
 
     //Constructor
     public Records(Context ctx) {
@@ -96,13 +106,36 @@ public class Records {
         }
     }
 
-    public void removeRecordAt(int index){
-        //Удаляем с сервера
-        recordToRemove = records.get(index);
-        new RemoveRecord().execute();
+    public boolean removeRecordAt(int index, int uid, int countDisagree, String language, View v){
 
-        //Удаляем из списска дабы не обращаться повторно к серверу за обновленными данными
-        records.remove(index);
+        this.countDisagree = countDisagree;
+        this.uid = uid;
+
+        if(countDisagree <= MAX_DISAGREES) {
+            //Удаляем с сервера
+            recordToRemove = records.get(index);
+            new RemoveRecord().execute();
+            //Удаляем из списска дабы не обращаться повторно к серверу за обновленными данными
+            records.remove(index);
+            return true;
+        } else {
+            if(language.equals("ru")) {
+                Snackbar snackbar = Snackbar.make(v, R.string.cannot_remove_record_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar.make(v, R.string.cannot_remove_record_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.setAction("Ok", vl -> {
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            }
+            return false;
+        }
     }//removeRecordAt
 
     // AsyncTask для получения записей
@@ -116,8 +149,13 @@ public class Records {
                 StringBuffer sb = new StringBuffer();
                 sb.append(recordToRemove.getId());
 
+                //Увеличиваем счетчик отмененных записей и добавляем в параметры запроса
+                countDisagree += 1;
+
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair(TAG_RID, sb.toString()));
+                params.add(new BasicNameValuePair(TAG_UID, Integer.toString(uid)));
+                params.add(new BasicNameValuePair(TAG_COUNT_DISAGREE, Integer.toString(countDisagree)));
 
                 // получаем информацию через запрос HTTP GET
                 JSONObject jsonRecords = jsonParser.makeHttpRequest(url_remove_record, "POST", params);

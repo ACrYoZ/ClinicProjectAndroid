@@ -12,6 +12,7 @@
     <string name="settings_en">Settings</string>
     <string name="logout_en">Logout</string>
     <string name="login_en">Login</string>
+    <string name="exception_on_add_rec_en">Fields are incorrect or you exceeded the limit of pending records. Please, contact support.</string>
     <string name="open_en">Open</string>
     <string name="close_en">Close</string>
     <string name="accept_en">Accept</string>
@@ -29,12 +30,17 @@
     <string name="offline_mode_en">No internet connection</string>
     <string name="record_sending_en">Your record sended to the registry</string>
     <string name="selected_date_en">Select date:</string>
+    <string name="cannot_remove_record_en">You exceeded the limit of pending records.</string>
+    <string name="are_u_sure_en">Are you sure?</string>
     <string name="selected_time_en">Select time:</string>
     <string name="select_category_en">Select category:</string>
 
     //Значения на русском
     <string name="pref_category_general_ru">Основные настройки</string>
     <string name="offline_mode_ru">Нет интернет соединения</string>
+    <string name="are_u_sure_ru">Вы уверены?</string>
+    <string name="cannot_remove_record_ru">Вы привысили лимит отклоненных записей.</string>
+    <string name="exception_on_add_rec_ru">Не все поля заполнены корректно, либо вы привысили лимит отмененных записей. В случае ошибки - обратитесь в поддержку.</string>
     <string name="record_sending_ru">Ваша запись отправлена в регистратуру</string>
     <string name="selected_date_ru">Выберите дату:</string>
     <string name="selected_time_ru">Выберите время:</string>

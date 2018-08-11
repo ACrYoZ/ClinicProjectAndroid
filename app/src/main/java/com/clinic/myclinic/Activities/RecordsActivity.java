@@ -2,6 +2,7 @@ package com.clinic.myclinic.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.FloatingActionButton;
@@ -97,12 +98,14 @@ public class RecordsActivity extends AppCompatActivity
                     null, null, null, null, null);
             if(language.equals("ru")) {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
                 snackbar.show();
             } else {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
@@ -265,10 +268,11 @@ public class RecordsActivity extends AppCompatActivity
 
     @Override
     public void onCircleButtonClick(View view, final int position) {
-        records.removeRecordAt(position);
-        adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
-        adapter.notifyDataSetChanged();
-        lvRecords.setAdapter(adapter);
+        if(records.removeRecordAt(position, user.getId(), user.getCountDisagree(), language, getWindow().getDecorView().getRootView())) {
+            adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
+            adapter.notifyDataSetChanged();
+            lvRecords.setAdapter(adapter);
+        }
     }
 
     public boolean isOnline() {

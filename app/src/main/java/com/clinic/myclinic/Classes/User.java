@@ -40,6 +40,7 @@ public class User {
     private static final String TAG_AGE = "age";
     private static final String TAG_ADRESS = "adress";
     private static final String TAG_DIAGNOSIS = "diagnosis";
+    private static final String TAG_COUNT_DISAGREE = "disagree";
     private static final String TAG_MEDICATION = "medication";
     private static final String TAG_USER = "user";
 
@@ -52,6 +53,7 @@ public class User {
     private String userName;
     private String userSurname;
     private String userPatronymic;
+    private int countDisagree;
    @Nullable private String userDiagnosis;
    @Nullable private String userMedication;
 
@@ -155,6 +157,10 @@ public class User {
         this.userAdress = userAdress;
     }
 
+    public int getCountDisagree() {
+        return countDisagree;
+    }
+
     // AsyncTask для получения информации о пользователе
     private class GetUserDataTask extends AsyncTask<String, String, String> {
 
@@ -187,6 +193,7 @@ public class User {
                     userPhoto = user.getString(TAG_CONTENT);
                     userName = user.getString(TAG_NAME);
                     userSurname = user.getString(TAG_SURNAME);
+                    countDisagree = user.getInt(TAG_COUNT_DISAGREE);
                     userPatronymic = user.getString(TAG_PATRONYMIC);
                     userMedication = user.getString(TAG_MEDICATION);
                     userDiagnosis = user.getString(TAG_DIAGNOSIS);

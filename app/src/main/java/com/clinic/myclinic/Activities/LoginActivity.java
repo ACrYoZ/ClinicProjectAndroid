@@ -2,6 +2,7 @@ package com.clinic.myclinic.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -110,12 +111,14 @@ public class LoginActivity extends AppCompatActivity
         } else {
             if(language.equals("ru")) {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
                 snackbar.show();
             } else {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });

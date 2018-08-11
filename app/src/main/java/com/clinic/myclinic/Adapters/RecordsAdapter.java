@@ -1,6 +1,7 @@
 package com.clinic.myclinic.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,15 +55,29 @@ public class RecordsAdapter extends ArrayAdapter<Record>
         txtCause = view.findViewById(R.id.txtCause);
         CircleButton cbReject = view.findViewById(R.id.cbReject);
 
+        language = PersistantStorageUtils.getLanguagePreferences(ctx);
+
         //ссылка на объект записей
         final Record item = records.get(position);
 
         cbReject.setOnClickListener(v -> {
-            Snackbar snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("OK", v1 -> {
-                cbListener.onCircleButtonClick(v, position);
-            });
-            snackbar.show();
+            if(language.equals("ru")) {
+                Snackbar snackbar = Snackbar.make(v, R.string.are_u_sure_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.setAction("Ok", vl -> {
+                    cbListener.onCircleButtonClick(v, position);
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar.make(v, R.string.are_u_sure_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.setAction("Ok", vl -> {
+                    cbListener.onCircleButtonClick(v, position);
+                    snackbar.dismiss();
+                });
+                snackbar.show();
+            }
         });
 
         txtDoctorName.setText(item.getDoctorName());

@@ -3,6 +3,7 @@ package com.clinic.myclinic.Activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -56,6 +57,7 @@ public class AddANewRecordActivity extends AppCompatActivity
     private static final String TAG_DATE = "date";
     private static final String TAG_PASSED = "passed";
     private static final String TAG_ANNOTATION = "annotation";
+    private static final int MAX_DISAGREES = 15;
 
     TextView txtSelectCategory, txtSelectDoctor, txtSelectDate, txtSelectTime;
     Spinner spCategory, spDoctors, spTimeSelecter, spDateSelecter;
@@ -137,21 +139,38 @@ public class AddANewRecordActivity extends AppCompatActivity
                         spDateSelecter.getSelectedItem() != null &&
                         spDoctors.getSelectedItem() != null &&
                         spTimeSelecter.getSelectedItem() != null &&
-                        spCategory.getSelectedItem() != null) {
+                        spCategory.getSelectedItem() != null &&
+                        user.getCountDisagree() <= MAX_DISAGREES) {
                     new sendRecData().execute();
                 } else {
-                    Toasty.warning(this, "Не все поля заданы корректно", Toast.LENGTH_SHORT).show();
+                    if(language.equals("ru")) {
+                        Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.exception_on_add_rec_ru, Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setActionTextColor(Color.WHITE);
+                        snackbar.setAction("Ok", vl -> {
+                            snackbar.dismiss();
+                        });
+                        snackbar.show();
+                    } else {
+                        Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.exception_on_add_rec_en, Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setActionTextColor(Color.WHITE);
+                        snackbar.setAction("Ok", vl -> {
+                            snackbar.dismiss();
+                        });
+                        snackbar.show();
+                    }
                 }
             });
         } else {
             if(language.equals("ru")) {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
                 snackbar.show();
             } else {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_en, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     snackbar.dismiss();
                 });
