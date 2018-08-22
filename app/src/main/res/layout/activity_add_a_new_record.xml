@@ -19,6 +19,7 @@
             android:id="@+id/txtSelectCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0.65"
             android:text="@string/select_category_en"
             android:textSize="14sp" />
@@ -41,6 +42,7 @@
             android:id="@+id/txtSelectDoctor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:layout_weight="0.7"
             android:text="@string/select_the_doctor_en" />
@@ -63,10 +65,13 @@
             android:id="@+id/edtCause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/cause_en"
-            android:inputType="textLongMessage" />
+            android:inputType="textLongMessage"
+            android:singleLine="false" />
 
     </LinearLayout>
 
@@ -80,6 +85,7 @@
             android:id="@+id/txtSelectedDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0"
             android:text="@string/selected_date_en" />
 
@@ -102,6 +108,7 @@
             android:id="@+id/txtSelectedTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0.01"
             android:text="@string/selected_time_en" />
 
@@ -120,9 +127,12 @@
 
         <Button
             android:id="@+id/btnConfirm"
+            style="@android:style/Widget.Holo.Button.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/add_record_linear_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:text="@string/confirm_en" />

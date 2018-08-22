@@ -4,6 +4,8 @@ package com.clinic.myclinic.Utils;
     Утилиты для работы с данными авторизации
  */
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,6 +13,9 @@ import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 
+import com.clinic.myclinic.Activities.AddANewRecordActivity;
+import com.clinic.myclinic.Activities.LoginActivity;
+import com.clinic.myclinic.Activities.RecordsActivity;
 import com.clinic.myclinic.Activities.UserProfileActivity;
 import com.clinic.myclinic.R;
 
@@ -23,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public class AuthorizationUtils {
 
@@ -37,7 +43,10 @@ public class AuthorizationUtils {
 
     protected String login, password;
 
-    protected boolean isExist = false;
+    //-1 - стандартное значение, 0 - не существует, 1 - существует
+    protected int isExist = -1;
+    ProgressDialog pDialog;
+    Context ctx;
 
 
     private static final String PREFERENCES_AUTHORIZED_KEY = "isAuthorized";
@@ -45,9 +54,10 @@ public class AuthorizationUtils {
     private static final String PREFERENCES_AUTHORIZATION_EMAIL = "user_email";
     private static final String PREFERENCES_AUTHORIZATION_PASSWORD = "user_password";
 
-    public boolean checkForUserExist(String login, String password) {
+    public int checkForUserExist(String login, String password, Context ctx) {
+
         this.login = login; this.password = password;
-        ArrayList<HashMap<String, String>> userData = new ArrayList<HashMap<String, String>>();
+        this.ctx = ctx;
         new CheckForUserExistTask().execute();
 
         return isExist;
@@ -106,25 +116,54 @@ public class AuthorizationUtils {
     // Задача в другом потоке для загрузки данных о пользователе через HTTP Request
     class CheckForUserExistTask extends AsyncTask<String, String, String> {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(ctx);
+            pDialog.setMessage("Вход. Подождите...");
+            pDialog.setIndeterminate(true);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
         // получим данные о пользователе через url
         protected String doInBackground(String... args) {
             // Строим параметры
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair(TAG_LOGIN, login));
-            params.add(new BasicNameValuePair(TAG_PASSWORD, password));
+           List<NameValuePair> params = new ArrayList<NameValuePair>();
+           params.add(new BasicNameValuePair(TAG_LOGIN, login));
+           params.add(new BasicNameValuePair(TAG_PASSWORD, password));
 
-            // отправим данные через запрос POST
-            JSONObject json = jParser.makeHttpRequest(url_check_for_user_exist, "GET", params);
+           // отправим данные через запрос POST
+           JSONObject json = jParser.makeHttpRequest(url_check_for_user_exist, "GET", params);
 
-            // check json success tag
-            try {
-                int success = json.getInt(TAG_SUCCESS);
-                // если пользователь существует - устанавливаем флаг в true, если нет - ничего не делаем
-                if (success == 1) { isExist = true; }
-            } catch (JSONException e) {
-                e.printStackTrace();
+           try {
+               int success = json.getInt(TAG_SUCCESS);
+               // если пользователь существует - устанавливаем флаг в true, если нет - ничего не делаем
+               if (success == 1) {
+                   isExist = 1;
+               } else {
+                   isExist = 0;
+               }
+
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+
+           return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            pDialog.dismiss();
+            Log.d("pDialog", "I've bin dismissed");
+
+            //Костыли. Нужны для полного закрытия pDialog. Потому как по неизвестной мне причине, dismiss не закрывает окно
+            //TODO(bug-fix): Возможно есть другое решение, пересмотреть
+            if(isExist == 0) {
+                Intent intent = new Intent(ctx, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ctx.startActivity(intent);
             }
-            return null;
         }
     }
 }

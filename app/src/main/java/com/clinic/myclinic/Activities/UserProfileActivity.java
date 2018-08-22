@@ -3,6 +3,7 @@ package com.clinic.myclinic.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -161,9 +163,17 @@ public class UserProfileActivity extends AppCompatActivity
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
 
+
+        //Получаем разрешение экрана
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
         Picasso.get()
                 .load(user.getUserPhoto())
-                .resize(100, 100)
+                .resize(width/5, height/5)
                 .centerCrop()
                 .transform(new CircularTransformation())
                 .into(userPhoto);
