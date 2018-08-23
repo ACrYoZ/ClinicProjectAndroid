@@ -7,6 +7,7 @@ import android.util.Log;
 import com.clinic.myclinic.Activities.UserProfileActivity;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.JSONParser;
+import com.clinic.myclinic.Utils.PersistantStorageUtils;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -215,12 +216,14 @@ public class Doctors {
         return newTimeDutyList.toArray(newtimes);
     }
 
-    public String[] getDateDuty(String doc_name, int doc_postition) {
+    public String[] getDateDuty(String doc_name, int doc_postition, Context ctx) {
         this.doc_position = doc_postition;
 
         Doctor doc;
         ArrayList<String> newDateDutyList = new ArrayList<String>();
         String[] newdates = new String[newDateDutyList.size()];
+
+        String language = PersistantStorageUtils.getLanguagePreferences(ctx);
 
         for (Doctor f : doctors) {
             if (f.getName().equals(doc_name)) {
@@ -233,25 +236,66 @@ public class Doctors {
                 int fromi, toi;
 
                 int tmp;
-                tmp = Integer.parseInt(from.substring(8, 10));
-                if(tmp == 0) { fromi = Integer.parseInt(from.substring(9, 10)); } else { fromi = tmp; }
 
-                tmp = Integer.parseInt(to.substring(8, 10));
-                if(tmp == 0) { toi = Integer.parseInt(from.substring(9, 10)); } else { toi = tmp; }
-
-                StringBuilder sb;
-                String template = from.substring(0, 8);
-
-                for (int i = toi; i >= fromi; i--) {
-                    sb = new StringBuilder();
-                    if(i < 10) {
-                        sb.append(template + "0" + i);
+                if (language.equals("en")) {
+                    tmp = Integer.parseInt(from.substring(8, 10));
+                    if (tmp == 0) {
+                        fromi = Integer.parseInt(from.substring(9, 10));
                     } else {
-                        sb.append(template + i);
+                        fromi = tmp;
                     }
-                    newDateDutyList.add(sb.toString());
+
+                    tmp = Integer.parseInt(to.substring(8, 10));
+                    if (tmp == 0) {
+                        toi = Integer.parseInt(from.substring(9, 10));
+                    } else {
+                        toi = tmp;
+                    }
+
+                    StringBuilder sb;
+                    String template = from.substring(0, 8);
+
+                    for (int i = toi; i >= fromi; i--) {
+                        sb = new StringBuilder();
+                        if (i < 10) {
+                            sb.append(template + "0" + i);
+                        } else {
+                            sb.append(template + i);
+                        }
+                        newDateDutyList.add(sb.toString());
+                    }
+                    newdates = new String[newDateDutyList.size()];
+                } else {
+                    tmp = Integer.parseInt(from.substring(8, 10));
+                    if (tmp == 0) {
+                        fromi = Integer.parseInt(from.substring(9, 10));
+                    } else {
+                        fromi = tmp;
+                    }
+
+                    tmp = Integer.parseInt(to.substring(8, 10));
+                    if (tmp == 0) {
+                        toi = Integer.parseInt(from.substring(9, 10));
+                    } else {
+                        toi = tmp;
+                    }
+
+                    //2018-
+                    StringBuilder sb;
+                    String year = from.substring(0, 4);
+                    String month = from.substring(4, 7);
+
+                    for (int i = toi; i >= fromi; i--) {
+                        sb = new StringBuilder();
+                        if (i < 10) {
+                            sb.append("0" + i + month + "-" + year);
+                        } else {
+                            sb.append(i + month + "-" + year);
+                        }
+                        newDateDutyList.add(sb.toString());
+                    }
+                    newdates = new String[newDateDutyList.size()];
                 }
-                newdates = new String[newDateDutyList.size()];
             }
         }
         return newDateDutyList.toArray(newdates);

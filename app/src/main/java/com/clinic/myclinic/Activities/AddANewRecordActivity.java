@@ -227,7 +227,12 @@ public class AddANewRecordActivity extends AppCompatActivity
         protected String doInBackground(String... args) {
 
             StringBuilder sb = new StringBuilder();
-            sb.append(spDateSelecter.getSelectedItem().toString() + " " + spTimeSelecter.getSelectedItem().toString());
+
+            if(language.equals("ru")){
+                sb.append(getRightDate(spDateSelecter.getSelectedItem().toString()));
+            } else { sb.append(spDateSelecter.getSelectedItem().toString()); }
+
+            sb.append(" " + spTimeSelecter.getSelectedItem().toString());
             String docName = spDoctors.getSelectedItem().toString();
 
             try {
@@ -262,6 +267,19 @@ public class AddANewRecordActivity extends AppCompatActivity
         }
     }
 
+    private String getRightDate(String datefull) {
+        StringBuilder sb = new StringBuilder();
+        //01.02.2018
+        //2018-03-20
+        String date = datefull.substring(0, 2);
+        String month = datefull.substring(2, 5);
+        String year = datefull.substring(6, 10);
+
+        sb.append(year + "-" + month + "-" + date);
+
+        return sb.toString();
+    }
+
     private void setAdapterForDoctorsSP(String selectedCategorie) {
         //Адаптер для докторов
         ArrayAdapter<String> adapterDoc = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getNames(selectedCategorie));
@@ -289,7 +307,7 @@ public class AddANewRecordActivity extends AppCompatActivity
 
     private void setAdapterForDateSelectionSP(String doc_name, int pos) {
         //Адаптер для даты
-        ArrayAdapter<String> adapterDates = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getDateDuty(doc_name, pos));
+        ArrayAdapter<String> adapterDates = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getDateDuty(doc_name, pos, this));
         adapterDates.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDateSelecter.setAdapter(adapterDates);
     }
