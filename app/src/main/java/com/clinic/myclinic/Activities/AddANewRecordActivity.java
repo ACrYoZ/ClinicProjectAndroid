@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 import com.clinic.myclinic.Classes.Doctors;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.Interfaces.SettingsInterface;
+import com.clinic.myclinic.Interfaces.onCategoriesDataReceived;
+import com.clinic.myclinic.Interfaces.onDoctorsDataReceived;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.JSONParser;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
@@ -42,7 +46,9 @@ import java.util.concurrent.TimeUnit;
 import es.dmoral.toasty.Toasty;
 
 public class AddANewRecordActivity extends AppCompatActivity
-                                   implements SettingsInterface{
+                                   implements SettingsInterface
+                                              , onCategoriesDataReceived
+                                              , onDoctorsDataReceived {
 
     public  String language;
     public  String textSize;
@@ -112,27 +118,19 @@ public class AddANewRecordActivity extends AppCompatActivity
 
             user = new User(this);
             doctors = new Doctors(this);
+            doctors.setOnCategoriesDataReceived(this);
+            doctors.onCategoriesDataReceivedUpdateComponents();
 
-            //Адаптер для категорий
-            ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getCategories());
-            adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spCategory.setAdapter(adapterCategory);
-            spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            //Уведомляем пользователя о том, что мы получаем данные и ему необходимо подождать.
+            switch (language) {
+                case "ru":
+                    Toasty.info(this, "Получение данных. Пожалуйста, ожидайте...", Toast.LENGTH_SHORT).show();
+                    break;
 
-                    String selectedCategorie = spCategory.getSelectedItem().toString();
-                    setAdapterForDoctorsSP(selectedCategorie);
-                    spDoctors.setEnabled(true);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    spTimeSelecter.setEnabled(false);
-                    spDoctors.setEnabled(false);
-                    spTimeSelecter.setEnabled(false);
-                }
-            });
+                case "en":
+                    Toasty.info(this, "Receiving data. Please, wait...", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
             btnConfirm.setOnClickListener(v -> {
                 if (edtAnnotation.getText().toString().length() > 5 &&
@@ -161,6 +159,9 @@ public class AddANewRecordActivity extends AppCompatActivity
                 }
             });
         } else {
+            user = new User(0, null, null, "Unknown User", null,
+                    null, null, null, null, null);
+
             if(language.equals("ru")) {
                 Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.offline_mode_ru, Snackbar.LENGTH_INDEFINITE);
                 snackbar.setActionTextColor(Color.WHITE);
@@ -176,8 +177,6 @@ public class AddANewRecordActivity extends AppCompatActivity
                 });
                 snackbar.show();
             }
-            user = new User(0, null, null, "Unknown User", null,
-                    null, null, null, null, null);
         }
     }
 
@@ -269,8 +268,6 @@ public class AddANewRecordActivity extends AppCompatActivity
 
     private String getRightDate(String datefull) {
         StringBuilder sb = new StringBuilder();
-        //01.02.2018
-        //2018-03-20
         String date = datefull.substring(0, 2);
         String month = datefull.substring(2, 5);
         String year = datefull.substring(6, 10);
@@ -278,6 +275,29 @@ public class AddANewRecordActivity extends AppCompatActivity
         sb.append(year + "-" + month + "-" + date);
 
         return sb.toString();
+    }
+
+    private void setAdapterForCategoriesSP() {
+        //Адаптер для категорий
+        ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getCategories());
+        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCategory.setAdapter(adapterCategory);
+        spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selectedCategorie = spCategory.getSelectedItem().toString();
+                setAdapterForDoctorsSP(selectedCategorie);
+                spDoctors.setEnabled(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                spTimeSelecter.setEnabled(false);
+                spDoctors.setEnabled(false);
+                spTimeSelecter.setEnabled(false);
+            }
+        });
     }
 
     private void setAdapterForDoctorsSP(String selectedCategorie) {
@@ -324,5 +344,23 @@ public class AddANewRecordActivity extends AppCompatActivity
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void onCategoriesDataReceivedUpdateComponents() {
+        //Почему я использую handler - описано в классе UserProfileActivity.java в строке 334
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //Устанавливаем адаптер. Дальнейшие необходимые адаптеры он установит сам. Подробнее: см. код метода
+                setAdapterForCategoriesSP();
+            }
+        });
+    }
+
+    @Override
+    public void onDoctorsDataReceivedUpdateComponents() {
+        //TODO(programmer): В дальнейшем будет реализован метод callback для докторов.
     }
 }

@@ -1,13 +1,12 @@
 package com.clinic.myclinic.Classes;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.clinic.myclinic.Activities.UserProfileActivity;
+import com.clinic.myclinic.Interfaces.onUserDataReceived;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.JSONParser;
 
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements onUserDataReceived {
     JSONParser jsonParser = new JSONParser();
 
     Context context;
@@ -56,6 +55,9 @@ public class User {
     private int countDisagree;
    @Nullable private String userDiagnosis;
    @Nullable private String userMedication;
+
+    // создаем поле объекта-колбэка
+    private static onUserDataReceived dataReceived;
 
     //Constructors
     public User(int id, String userEmail, String userPhoto, String userName,
@@ -197,11 +199,22 @@ public class User {
                     userPatronymic = user.getString(TAG_PATRONYMIC);
                     userMedication = user.getString(TAG_MEDICATION);
                     userDiagnosis = user.getString(TAG_DIAGNOSIS);
+
+                    dataReceived.onUserDataReceivedUpdateComponents();
                 } else {
                     // не нашли пользователя
                 }
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }
+    }
+
+    @Override
+    public void onUserDataReceivedUpdateComponents() {
+
+    }
+
+    public void setOnDataReceived(onUserDataReceived dataReceived){
+        this.dataReceived = dataReceived;
     }
 }

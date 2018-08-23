@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.clinic.myclinic.Activities.UserProfileActivity;
+import com.clinic.myclinic.Interfaces.onRecordsDataReceived;
+import com.clinic.myclinic.Interfaces.onUserDataReceived;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.JSONParser;
@@ -22,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Records {
+public class Records implements onRecordsDataReceived {
 
     JSONParser jsonParser = new JSONParser();
     Context context;
@@ -52,6 +54,9 @@ public class Records {
 
     int countDisagree;
     int uid;
+
+    // создаем поле объекта-колбэка
+    private static onRecordsDataReceived dataReceived;
 
     //Constructor
     public Records(Context ctx) {
@@ -100,6 +105,7 @@ public class Records {
 
                         records.add(new Record(name + " " + patronymic + " " + surname, annotation, date, id));
                     }
+                    dataReceived.onRecordsDataReceivedUpdateComponents();
                 } else {}
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
@@ -172,6 +178,15 @@ public class Records {
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }
+    }
+
+    @Override
+    public void onRecordsDataReceivedUpdateComponents() {
+
+    }
+
+    public void setOnRecordsDataReceived(onRecordsDataReceived dataReceived){
+        this.dataReceived = dataReceived;
     }
 
 }

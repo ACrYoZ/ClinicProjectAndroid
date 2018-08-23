@@ -70,7 +70,7 @@ public class RecordsAdapter extends ArrayAdapter<Record>
                 });
                 snackbar.show();
             } else {
-                Snackbar snackbar = Snackbar.make(v, R.string.are_u_sure_ru, Snackbar.LENGTH_INDEFINITE);
+                Snackbar snackbar = Snackbar.make(v, R.string.are_u_sure_en, Snackbar.LENGTH_INDEFINITE);
                 snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setAction("Ok", vl -> {
                     cbListener.onCircleButtonClick(v, position);

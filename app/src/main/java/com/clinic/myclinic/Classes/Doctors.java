@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.clinic.myclinic.Activities.UserProfileActivity;
+import com.clinic.myclinic.Interfaces.onCategoriesDataReceived;
+import com.clinic.myclinic.Interfaces.onDoctorsDataReceived;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.JSONParser;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Doctors {
+public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived {
     JSONParser jsonParser = new JSONParser();
     Context context;
 
@@ -48,10 +50,15 @@ public class Doctors {
     ArrayList<String> names = null;
     int doc_position;
 
+    //поля callback
+    private static onCategoriesDataReceived categoriesDataReceived;
+    private static onDoctorsDataReceived doctorsDataReceived;
+
     public Doctors(Context ctx) {
         context = ctx;
         doctors = new ArrayList<Doctor>();
         new GetDoctorsTask().execute();
+        initCategories();
     }
 
     // AsyncTask для получения данных о врачах
@@ -92,6 +99,7 @@ public class Doctors {
 
                         doctors.add(new Doctor(name + " " + patronymic + " " + surname, pos, duty_from, duty_to, id));
                     }
+//                    doctorsDataReceived.onDoctorsDataReceivedUpdateComponents();
                 } else {
                 }
             } catch (JSONException e) {
@@ -133,6 +141,7 @@ public class Doctors {
                     }
                 } else {
                 }
+                categoriesDataReceived.onCategoriesDataReceivedUpdateComponents();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -140,15 +149,12 @@ public class Doctors {
         }
     }
 
-    public String[] getCategories() {
+    public void initCategories() {
         categories = new ArrayList<String>();
         new GetCategoriesTask().execute();
-        //TODO: исправить
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    }
+
+    public String[] getCategories() {
         String[] arr = new String[categories.size()];
         return categories.toArray(arr);
     }
@@ -299,6 +305,24 @@ public class Doctors {
             }
         }
         return newDateDutyList.toArray(newdates);
+    }
+
+    @Override
+    public void onDoctorsDataReceivedUpdateComponents() {
+
+    }
+
+    @Override
+    public void onCategoriesDataReceivedUpdateComponents() {
+
+    }
+
+    public void setOnDoctorsDataReceived(onDoctorsDataReceived received){
+        doctorsDataReceived = received;
+    }
+
+    public void setOnCategoriesDataReceived(onCategoriesDataReceived received){
+        categoriesDataReceived = received;
     }
 }
 

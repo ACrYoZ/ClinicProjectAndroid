@@ -79,6 +79,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="4dp"
         android:background="@android:color/black" />
 
@@ -113,6 +115,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="4dp"
         android:background="@android:color/black" />
 

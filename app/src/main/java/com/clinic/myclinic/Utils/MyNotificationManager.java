@@ -34,17 +34,15 @@ public class MyNotificationManager {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx);
 
-        //Создаем уведомление с помощью builder. То что я делаю - считается устаревшим, при том с недавних пор, но, другой вариант я не знаю...
+        //Создаем уведомление с помощью builder. То, что я делаю - считается устаревшим, при том с недавних пор, но, другой вариант я не знаю...
         Notification mNotification = builder.setSmallIcon(R.drawable.heart)
                                             .setAutoCancel(true)
                                             .setContentIntent(pendingIntent)
                                             .setContentTitle(from)
                                             .setContentText(notification)
-                //TODO: не работает звук уведомления.
-                                            .setDefaults(Notification.DEFAULT_SOUND)
+                //TODO(fix): не работает звук уведомления.
+                                            .setDefaults(Notification.DEFAULT_ALL)
                                             .setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.heart))
-                                            .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
-                                            .setLights(Color.RED, 3000, 3000)
                                             .build();
 
         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,28 +23,27 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.clinic.myclinic.Adapters.RecordsAdapter;
-import com.clinic.myclinic.Classes.Record;
 import com.clinic.myclinic.Classes.Records;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.Interfaces.SettingsInterface;
+import com.clinic.myclinic.Interfaces.onRecordsDataReceived;
+import com.clinic.myclinic.Interfaces.onUserDataReceived;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
 import es.dmoral.toasty.Toasty;
 
 import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
 
 public class RecordsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener, SettingsInterface{
+        implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener, SettingsInterface
+        , onRecordsDataReceived, onUserDataReceived {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -81,17 +82,23 @@ public class RecordsActivity extends AppCompatActivity
 
             //Создание пользователя
             user = new User(this);
+            user.setOnDataReceived(this);
+            user.onUserDataReceivedUpdateComponents();
+
             //Создание списка записей пользователя
             records = new Records(this);
+            records.setOnRecordsDataReceived(this);
+            records.onRecordsDataReceivedUpdateComponents();
 
-            //Нереально дикий костыль времен динозавров.TODO: исправить
-            //Используется для того, чтобы пользователь наверняка создался, а уже затем пошла инициализация элементов
-            //Если убрать sleep, то все поля будут - NULL, т.к. на получение данных нужно время, а активность не ждет и
-            //инициализирует ещё не существующие элементы класса User
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (Exception e) {
-                e.printStackTrace();
+            //Уведомляем пользователя о том, что мы получаем данные и ему необходимо подождать.
+            switch (language) {
+                case "ru":
+                    Toasty.info(this, "Получение данных. Пожалуйста, ожидайте...", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case "en":
+                    Toasty.info(this, "Receiving data. Please, wait...", Toast.LENGTH_SHORT).show();
+                    break;
             }
         } else {
             user = new User(0, null, null, "Unknown User", null,
@@ -142,16 +149,6 @@ public class RecordsActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Picasso.get()
-                .load(user.getUserPhoto())
-                .resize(100, 100)
-                .centerCrop()
-                .transform(new CircularTransformation())
-                .into(userPhotoNavigationDrawer);
-
-        userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
-        userEmail.setText(user.getUserEmail());
-
         //Получаем FAB
         fab = findViewById(R.id.fab_add);
 
@@ -159,35 +156,6 @@ public class RecordsActivity extends AppCompatActivity
         fab.setOnClickListener(v -> {
             startAddNewRecordActivity();
         });
-
-        if(records != null) {
-            adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
-
-            lvRecords = findViewById(R.id.lvRecords);
-
-            // подписываем нашу активити на события колбэка
-            adapter.setOnCircleButtonClickListener(this);
-            lvRecords.setAdapter(adapter);
-
-            //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
-            lvRecords.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    if (scrollState == SCROLL_STATE_IDLE) {
-                        fab.animate().scaleX(1f).scaleY(1f).start();
-                        flag = true;
-                    }
-                }
-
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    if (flag) {
-                        fab.animate().scaleX(0f).scaleY(0f).start();
-                        flag = false;
-                    }
-                }
-            });
-        }
 
         //Устанавливаем актуальный язык
         switch (language) {
@@ -305,4 +273,63 @@ public class RecordsActivity extends AppCompatActivity
 
     @Override
     public void setTextSize() {}
+
+    @Override
+    public void onRecordsDataReceivedUpdateComponents() {
+        //Почему я использую handler - описано в классе UserProfileActivity.java в строке 334
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(records != null) {
+                    adapter = new RecordsAdapter(RecordsActivity.this, R.layout.list_records_adapter_layout, records.getRecords());
+
+                    lvRecords = findViewById(R.id.lvRecords);
+
+                    // подписываем нашу активити на события колбэка
+                    adapter.setOnCircleButtonClickListener(RecordsActivity.this);
+                    lvRecords.setAdapter(adapter);
+
+                    //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
+                    lvRecords.setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+                            if (scrollState == SCROLL_STATE_IDLE) {
+                                fab.animate().scaleX(1f).scaleY(1f).start();
+                                flag = true;
+                            }
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            if (flag) {
+                                fab.animate().scaleX(0f).scaleY(0f).start();
+                                flag = false;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onUserDataReceivedUpdateComponents() {
+        //Почему я использую handler - описано в классе UserProfileActivity.java в строке 334
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.get()
+                        .load(user.getUserPhoto())
+                        .resize(100, 100)
+                        .centerCrop()
+                        .transform(new CircularTransformation())
+                        .into(userPhotoNavigationDrawer);
+            }
+        });
+
+        userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
+        userEmail.setText(user.getUserEmail());
+    }
 }
