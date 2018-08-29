@@ -334,7 +334,11 @@ public class UserProfileActivity extends AppCompatActivity
         //!!! Важно !!!
         //Именно этот кусок кода, связанный с handler - позволяет работать с Picasso. Если убрать handler - то всё будет плачевно,
         //т.к. Picasso использует слабые ссылки на объекты, и с точки зрения безопасности, это нихрена не безопасно.
-        //потому он сразу же выбросит Exception: java.lang.IllegalStateException: Method call should happen from the main thread.
+        //Но это только верхушка айсберга!
+        //Дело в том, что компоненты интефрейса, могут быть изменены исключительно в своем потоке. Т.е. в жизненном цикле активности
+        //onCreate, onResume, onPause и тд.
+        //потому поток сразу же выбросит Exception: "java.lang.IllegalStateException: Method call should happen from the main thread." у Picasso
+        //и "Only the original thread that created a view hierarchy can touch its views" у элементов типа TextView и т.д.
         //И будет прав. Так что для успешной работы - используйте Handler!
         Handler uiHandler = new Handler(Looper.getMainLooper());
         uiHandler.post(new Runnable() {
@@ -342,7 +346,7 @@ public class UserProfileActivity extends AppCompatActivity
             public void run() {
                 Picasso.get()
                         .load(user.getUserPhoto())
-                        .resize(width/5, height/5)
+                        .resize(width / 5, height / 5)
                         .centerCrop()
                         .transform(new CircularTransformation())
                         .into(userPhoto);
@@ -352,16 +356,17 @@ public class UserProfileActivity extends AppCompatActivity
                         .centerCrop()
                         .transform(new CircularTransformation())
                         .into(userPhotoNavigationDrawer);
+
+
+                userName.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
+                userAge.setText(user.getUserAge());
+                userAdress.setText(user.getUserAdress());
+                userDiagnosis.setText(user.getUserDiagnosis());
+                userMedication.setText(user.getUserMedication());
+                userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
+                userEmail.setText(user.getUserEmail());
             }
         });
-
-        userName.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
-        userAge.setText(user.getUserAge());
-        userAdress.setText(user.getUserAdress());
-        userDiagnosis.setText(user.getUserDiagnosis());
-        userMedication.setText(user.getUserMedication());
-        userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
-        userEmail.setText(user.getUserEmail());
     }
 
     private class sendToken extends AsyncTask<String, String, String> {

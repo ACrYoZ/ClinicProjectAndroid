@@ -84,7 +84,6 @@ public class PersistantStorageUtils {
     }
 
     public static Boolean getTokenSended(Context ctx){
-        boolean def = false;
         return ctx.getSharedPreferences(PREF_KEY_TOKEN_SENDED, Context.MODE_PRIVATE)
                 .getBoolean(PREF_KEY_TOKEN_SENDED, false);
     }
