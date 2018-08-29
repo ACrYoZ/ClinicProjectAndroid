@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import com.clinic.myclinic.R;
@@ -32,17 +33,19 @@ public class MyNotificationManager {
                 ,PendingIntent.FLAG_UPDATE_CURRENT
         );
 
+        //TODO(programmer): fix deprecated NotificationCompat.Builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx);
 
-        //Создаем уведомление с помощью builder. То, что я делаю - считается устаревшим, при том с недавних пор, но, другой вариант я не знаю...
+        //Создаем уведомление с помощью builder. То, что я делаю - считается устаревшим(deprecated), при том с недавних пор, но, другой вариант я не знаю...
         Notification mNotification = builder.setSmallIcon(R.drawable.heart)
                                             .setAutoCancel(true)
+                                            .setTicker("myClinic")
                                             .setContentIntent(pendingIntent)
                                             .setContentTitle(from)
                                             .setContentText(notification)
-                //TODO(fix): не работает звук уведомления.
                                             .setDefaults(Notification.DEFAULT_ALL)
                                             .setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.heart))
+                                            .setPriority(2)
                                             .build();
 
         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;

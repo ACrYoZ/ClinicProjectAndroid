@@ -151,10 +151,7 @@ public class UserProfileActivity extends AppCompatActivity
                     Toasty.info(this, "Receiving data. Please, wait...", Toast.LENGTH_SHORT).show();
                     break;
             }
-            //Если токен не был отправлен на сервер - отправляем
-            if(!PersistantStorageUtils.getTokenSended(this)){
-                PersistantStorageUtils.storeTokenSended(true, this);
-                new sendToken().execute(); }
+                new sendToken().execute();
         } else {
             user = new User(0, null, null, "Unknown User", null,
                     null, null, null, null, null);
@@ -344,15 +341,21 @@ public class UserProfileActivity extends AppCompatActivity
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
+//                userPhoto.setScaleX(width/16);
+//                userPhoto.setScaleY(height/16);
+//
+//                userPhotoNavigationDrawer.setScaleX(width/19);
+//                userPhotoNavigationDrawer.setScaleY(height/19);
+
                 Picasso.get()
                         .load(user.getUserPhoto())
-                        .resize(width / 5, height / 5)
+                        .resize(300, 300)
                         .centerCrop()
                         .transform(new CircularTransformation())
                         .into(userPhoto);
                 Picasso.get()
                         .load(user.getUserPhoto())
-                        .resize(100, 100)
+                        .resize(200, 200)
                         .centerCrop()
                         .transform(new CircularTransformation())
                         .into(userPhotoNavigationDrawer);

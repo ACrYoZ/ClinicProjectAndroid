@@ -322,14 +322,14 @@ public class RecordsActivity extends AppCompatActivity
             public void run() {
                 Picasso.get()
                         .load(user.getUserPhoto())
-                        .resize(100, 100)
+                        .resize(200, 200)
                         .centerCrop()
                         .transform(new CircularTransformation())
                         .into(userPhotoNavigationDrawer);
+
+                userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
+                userEmail.setText(user.getUserEmail());
             }
         });
-
-        userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
-        userEmail.setText(user.getUserEmail());
     }
 }
