@@ -49,13 +49,13 @@ public class RecordsActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors;
 
     private Toolbar mToolbar;
 
     boolean flag;   //Вспомогательная переменная-флаг для слушателя OnScrollListener
 
-    public  String language;
+    public String language;
 
     //Объявляем компоненты интерфейса
     ImageView userPhotoNavigationDrawer;
@@ -144,6 +144,7 @@ public class RecordsActivity extends AppCompatActivity
         mylogout = navMenu.findItem(R.id.nav_logout);
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
+        myDoctors = navMenu.findItem(R.id.nav_doctors);
 
         navView.setNavigationItemSelectedListener(this);
 
@@ -224,6 +225,9 @@ public class RecordsActivity extends AppCompatActivity
             case R.id.nav_logout:
                 onLogout();
                 break;
+            case R.id.nav_doctors:
+                startDoctorsInfoActivity();
+                break;
             case R.id.nav_settings:
                 startSettingsActivity();
                 break;
@@ -232,6 +236,13 @@ public class RecordsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_records);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startDoctorsInfoActivity() {
+        Intent intent = new Intent(this, AboutDoctorActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -261,6 +272,7 @@ public class RecordsActivity extends AppCompatActivity
         mylogout.setTitle(R.string.logout_ru);
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
+        myDoctors.setTitle(R.string.doctors_ru);
     }
 
     @Override
@@ -269,6 +281,7 @@ public class RecordsActivity extends AppCompatActivity
         mylogout.setTitle(R.string.logout_en);
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
+        myDoctors.setTitle(R.string.doctors_en);
     }
 
     @Override

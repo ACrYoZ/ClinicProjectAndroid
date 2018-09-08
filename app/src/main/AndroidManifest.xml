@@ -23,22 +23,21 @@
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.RecordsActivity" />
         <activity android:name=".Activities.AddANewRecordActivity" />
-        <activity android:name=".Activities.PreferencesActivity"/>
+        <activity android:name=".Activities.PreferencesActivity" />
 
-        <service
-            android:name="fcm.FCMIdService">
+        <service android:name="fcm.FCMIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="fcm.FCMMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name="fcm.FCMMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
+        <activity android:name=".Activities.AboutDoctorActivity" />
+        <activity android:name=".Activities.ExtendedDoctorInfoActivity"></activity>
     </application>
 
 </manifest>

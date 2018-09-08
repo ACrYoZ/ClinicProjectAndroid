@@ -120,6 +120,8 @@ public class AddANewRecordActivity extends AppCompatActivity
             doctors = new Doctors(this);
             doctors.setOnCategoriesDataReceived(this);
             doctors.onCategoriesDataReceivedUpdateComponents();
+            doctors.setOnDoctorsDataReceived(this);
+            doctors.onDoctorsDataReceivedUpdateComponents();
 
             //Уведомляем пользователя о том, что мы получаем данные и ему необходимо подождать.
             switch (language) {
@@ -361,6 +363,5 @@ public class AddANewRecordActivity extends AppCompatActivity
 
     @Override
     public void onDoctorsDataReceivedUpdateComponents() {
-        //TODO(programmer): В дальнейшем будет реализован метод callback для докторов.
     }
 }

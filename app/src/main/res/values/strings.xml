@@ -10,6 +10,7 @@
     <string name="my_profile_en">My profile</string>
     <string name="records_en">My records</string>
     <string name="settings_en">Settings</string>
+    <string name="doctors_en">Doctors</string>
     <string name="logout_en">Logout</string>
     <string name="login_en">Login</string>
     <string name="exception_on_add_rec_en">Fields are incorrect or you exceeded the limit of pending records. Please, contact support.</string>
@@ -34,9 +35,17 @@
     <string name="are_u_sure_en">Are you sure?</string>
     <string name="selected_time_en">Select time:</string>
     <string name="select_category_en">Select category:</string>
+    <string name="parlor_en">Parlor:</string>
+    <string name="phone_en">Phone:</string>
+    <string name="set_rating_en">Set your rating for docror:</string>
+    <string name="rating_en">Rating:</string>
 
     //Значения на русском
     <string name="pref_category_general_ru">Основные настройки</string>
+    <string name="parlor_ru">Кабинет:</string>
+    <string name="phone_ru">Телефон:</string>
+    <string name="rating_ru">Рейтинг:</string>
+    <string name="set_rating_ru">Оставить отзыв о докторе:</string>
     <string name="offline_mode_ru">Нет интернет соединения</string>
     <string name="are_u_sure_ru">Вы уверены?</string>
     <string name="cannot_remove_record_ru">Вы привысили лимит отклоненных записей.</string>
@@ -45,6 +54,7 @@
     <string name="selected_date_ru">Выберите дату:</string>
     <string name="selected_time_ru">Выберите время:</string>
     <string name="select_category_ru">Выберите категорию:</string>
+    <string name="doctors_ru">Врачи</string>
     <string name="unknownUser_ru">Unknown User</string>
     <string name="age_ru">Возраст:</string>
     <string name="adress_ru">Адрес:</string>
@@ -94,5 +104,9 @@
         <item>19</item>
         <item>20</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_extended_doctor_info">ExtendedDoctorInfoActivity</string>
 
 </resources>

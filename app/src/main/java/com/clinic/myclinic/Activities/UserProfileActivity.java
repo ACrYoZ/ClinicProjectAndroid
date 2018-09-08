@@ -66,7 +66,7 @@ public class UserProfileActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors;
 
     private Toolbar mToolbar;
 
@@ -133,6 +133,7 @@ public class UserProfileActivity extends AppCompatActivity
         mylogout = navMenu.findItem(R.id.nav_logout);
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
+        myDoctors = navMenu.findItem(R.id.nav_doctors);
 
         //Если сеть есть - берем данные с сервера. Если сети нет - создаем "null" пользователя
         if(isOnline()) {
@@ -171,7 +172,6 @@ public class UserProfileActivity extends AppCompatActivity
                 snackbar.show();
             }
         }
-
 
         //Устанавливаем актуальный язык
         switch (language){
@@ -219,6 +219,13 @@ public class UserProfileActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    private void startDoctorsActivity() {
+        Intent intent = new Intent(this, AboutDoctorActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
     //Если пользователь не авторизован - завершаем главную активность
     private void onLogout() {
         Intent login = new Intent(this, LoginActivity.class);
@@ -247,6 +254,9 @@ public class UserProfileActivity extends AppCompatActivity
                 break;
             case R.id.nav_settings:
                 startSettingsActivity();
+                break;
+            case R.id.nav_doctors:
+                startDoctorsActivity();
                 break;
         }
 
@@ -280,10 +290,12 @@ public class UserProfileActivity extends AppCompatActivity
         txtAdress.setText(R.string.adress_ru);
         txtDiagnosis.setText(R.string.diagnosis_ru);
         txtMedication.setText(R.string.medication_ru);
+
         myacc.setTitle(R.string.my_profile_ru);
         mylogout.setTitle(R.string.logout_ru);
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
+        myDoctors.setTitle(R.string.doctors_ru);
     }
 
     @Override
@@ -297,6 +309,7 @@ public class UserProfileActivity extends AppCompatActivity
         mylogout.setTitle(R.string.logout_en);
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
+        myDoctors.setTitle(R.string.doctors_en);
     }
 
     @Override
@@ -319,6 +332,7 @@ public class UserProfileActivity extends AppCompatActivity
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    //TODO(programmer): адаптивная настройка размера ImageView
     @Override
     public void onUserDataReceivedUpdateComponents() {
         //Получаем разрешение экрана

@@ -27,6 +27,7 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
 
     //адрес
     private static String url_get_doctors = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_doctors.php";
+    private static String url_get_doctors_expanded = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_doctors_expanded.php";
     private static String url_get_categories = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_categories.php";
 
     //теги узлов JSON
@@ -36,7 +37,11 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
     private static final String TAG_DOCTORS = "doctors";
     private static final String TAG_DID = "did";
     private static final String TAG_NAME = "name";
+    private static final String TAG_PHONE = "phone";
+    private static final String TAG_PHOTO_URL = "photo";
     private static final String TAG_PATRONYMIC = "patronymic";
+    private static final String TAG_RATING = "rating";
+    private static final String TAG_PARLOR = "parlor";
     private static final String TAG_SURNAME = "surname";
     private static final String TAG_POSITION = "position_name";
     private static final String TAG_DUTY_FROM = "from";
@@ -93,15 +98,19 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
                         String name = doctor.getString(TAG_NAME);
                         String patronymic = doctor.getString(TAG_PATRONYMIC);
                         String surname = doctor.getString(TAG_SURNAME);
+                        String phone = doctor.getString(TAG_PHONE);
+                        String photo = doctor.getString(TAG_PHOTO_URL);
                         String pos = doctor.getString(TAG_POSITION);
+                        String parlor = doctor.getString(TAG_PARLOR);
+                        double rating = doctor.getDouble(TAG_RATING);
                         String duty_from = doctor.getString(TAG_DUTY_FROM);
                         String duty_to = doctor.getString(TAG_DUTY_TO);
 
-                        doctors.add(new Doctor(name + " " + patronymic + " " + surname, pos, duty_from, duty_to, id));
+                        doctors.add(new Doctor(id,  name + " " + patronymic + " " + surname, pos, phone, photo, duty_from, duty_to, rating, parlor));
                     }
-//                    doctorsDataReceived.onDoctorsDataReceivedUpdateComponents();
                 } else {
                 }
+                doctorsDataReceived.onDoctorsDataReceivedUpdateComponents();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -147,6 +156,10 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
             }
             return null;
         }
+    }
+
+    public ArrayList<Doctor> getDoctors() {
+        return doctors;
     }
 
     public void initCategories() {
