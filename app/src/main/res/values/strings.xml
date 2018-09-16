@@ -39,6 +39,7 @@
     <string name="phone_en">Phone:</string>
     <string name="set_rating_en">Set your rating for docror:</string>
     <string name="rating_en">Rating:</string>
+    <string name="about_doc_en">About Doctor:</string>
 
     //Значения на русском
     <string name="pref_category_general_ru">Основные настройки</string>
@@ -79,6 +80,7 @@
     <string name="pref_summary_change_language_ru">Выберите эту опцию если хотите изменить язык</string>
     <string name="pref_title_text_size_ru">Изменить размер шрифта</string>
     <string name="pref_summary_text_size_ru">Чтобы изменить размер шрифта - нажмите тут. Минимальный размер - 14sp, максимальный - 20sp</string>
+    <string name="about_doc_ru">Информация о враче:</string>
 
 
     <string name="change_lang_key">PREF_CHANGE_LANGUAGE</string>

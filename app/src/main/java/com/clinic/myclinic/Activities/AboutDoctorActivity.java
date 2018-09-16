@@ -43,6 +43,7 @@ public class AboutDoctorActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, onUserDataReceived, onDoctorsDataReceived {
 
     public final static String ID_DOCTORS_OBJ = "doctor_obj";
+    public final static String ID_USER_OBJ = "user_obj";
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -254,6 +255,7 @@ public class AboutDoctorActivity extends AppCompatActivity
     private void startAboutDocActivity(Doctor doctor) {
         Intent intent = new Intent(this, ExtendedDoctorInfoActivity.class);
         intent.putExtra(ID_DOCTORS_OBJ, doctor);
+        intent.putExtra(ID_USER_OBJ, user.getId());
         startActivity(intent);
     }
 
