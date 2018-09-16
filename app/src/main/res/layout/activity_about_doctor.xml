@@ -20,7 +20,9 @@
         <ListView
             android:id="@+id/lvDoctors"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@color/White"></ListView>
 
     </LinearLayout>
 

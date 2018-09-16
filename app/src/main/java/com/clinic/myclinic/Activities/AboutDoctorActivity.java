@@ -200,6 +200,15 @@ public class AboutDoctorActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Установка возможности клика по "гамбургеру". Т.е. без этого действия, клик по "гамбургеру ничего делать не булет"
+        if(mToggle.onOptionsItemSelected(item)){
+            return true;
+        }//if
+        return super.onOptionsItemSelected(item);
+    }
+
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

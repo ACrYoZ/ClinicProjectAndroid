@@ -1,22 +1,21 @@
 package com.clinic.myclinic.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.clinic.myclinic.Classes.Doctor;
-import com.clinic.myclinic.Classes.Record;
 import com.clinic.myclinic.R;
+import com.clinic.myclinic.Utils.CircularTransformation;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import at.markushi.ui.CircleButton;
 
 public class DoctorsAdapter extends ArrayAdapter<Doctor> {
 
@@ -27,7 +26,9 @@ public class DoctorsAdapter extends ArrayAdapter<Doctor> {
     public static String language;
     public static String textSize;
 
-    TextView txtDocName, txtDescription;
+    TextView txtDocName, txtPos, txtPhone, txtCabinet;
+    ImageView imgDocCard;
+    RatingBar rbRating;
     Context ctx;
 
     public DoctorsAdapter(Context context, int res, ArrayList<Doctor> doctors){
@@ -45,7 +46,11 @@ public class DoctorsAdapter extends ArrayAdapter<Doctor> {
 
         //Ссылки элементов
         txtDocName = view.findViewById(R.id.txtDoctorFullName);
-        txtDescription = view.findViewById(R.id.txtDescription);
+        txtPos = view.findViewById(R.id.txtPos);
+        rbRating = view.findViewById(R.id.rbRatingCard);
+        txtPhone = view.findViewById(R.id.txtPhoneCard);
+        txtCabinet = view.findViewById(R.id.txtCabinet);
+        imgDocCard = view.findViewById(R.id.imgDocCard);
 
         language = PersistantStorageUtils.getLanguagePreferences(ctx);
 
@@ -54,7 +59,17 @@ public class DoctorsAdapter extends ArrayAdapter<Doctor> {
         
 
         txtDocName.setText(item.getName());
-        txtDescription.setText(item.getPosition());
+        txtPos.setText(item.getPosition());
+        txtPhone.setText(item.getPhone());
+        txtCabinet.setText(item.getParlor());
+        rbRating.setRating((float)item.getRating());
+
+        Picasso.get()
+                .load(item.getPhotoURL())
+                .resize(150, 150)
+                .centerCrop()
+                .transform(new CircularTransformation())
+                .into(imgDocCard);
 
         //Получаем актуальный размер шрифта
         textSize = PersistantStorageUtils.getTextSizePreferences(ctx);
@@ -66,7 +81,9 @@ public class DoctorsAdapter extends ArrayAdapter<Doctor> {
 
     private void setTextSize() {
         txtDocName.setTextSize(Integer.parseInt(textSize));
-        txtDescription.setTextSize(Integer.parseInt(textSize));
+        txtPos.setTextSize(Integer.parseInt(textSize));
+        txtPhone.setTextSize(Integer.parseInt(textSize));
+        txtCabinet.setTextSize(Integer.parseInt(textSize));
     }
 
 }
