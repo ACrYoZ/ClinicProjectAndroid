@@ -47,8 +47,10 @@
     <string name="avaliable_phones_en">Avaliable phones:</string>
     <string name="pref_category_extra_en">Extra</string>
     <string name="pref_title_map_mode_en">Allow map gestures</string>
+    <string name="search_text_en">Search</string>
 
     //Значения на русском
+    <string name="search_text_ru">Поиск</string>
     <string name="pref_title_map_mode_ru">Включить управление жестами для карты</string>
     <string name="pref_category_extra_ru">Дополнительные</string>
     <string name="about_clinic_ru">О клинике</string>

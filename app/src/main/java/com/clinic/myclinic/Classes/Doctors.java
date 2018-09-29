@@ -184,6 +184,20 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
         return names.toArray(arr);
     }
 
+    public Doctor getDoctorByID(int id){
+     for(Doctor doc : doctors){
+         if(doc.getId() == id) { return doc; }
+     }
+     return null;
+    }
+
+    public Doctor getDoctorByPhone(String phone){
+        for(Doctor doc : doctors){
+            if(doc.getPhone().equals(phone)) {return doc;}
+        }
+        return null;
+    }
+
     public String getDoctorIDByName(String name){
      int id = 0;
 

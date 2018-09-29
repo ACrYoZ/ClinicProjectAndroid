@@ -17,11 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
@@ -216,6 +220,31 @@ public class AboutDoctorActivity extends AppCompatActivity
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    //Прикручиваем поисковую строку к action bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.menuSearch);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public void onUserDataReceivedUpdateComponents() {
         //Почему я использую handler - описано в классе UserProfileActivity.java в строке 334
@@ -253,7 +282,10 @@ public class AboutDoctorActivity extends AppCompatActivity
                     lvDoctors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startAboutDocActivity(doctors.getDoctors().get(position));
+                            TextView txt_phone = view.findViewById(R.id.txtPhoneCard);
+                            String phone = txt_phone.getText().toString();
+
+                            startAboutDocActivity(doctors.getDoctorByPhone(phone));
                         }
                     });
                 }
