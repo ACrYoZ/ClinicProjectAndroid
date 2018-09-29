@@ -19,6 +19,7 @@ public class PersistantStorageUtils {
     private static final String PREF_KEY_TEXT_SIZE = "PREF_CHANGE_TXT_SIZE";
     private static final String PREF_KEY_TOKEN = "PREF_PERSONAL_TOKEN";
     private static final String PREF_KEY_TOKEN_SENDED = "PREF_PERSONAL_TOKEN_SENDED";
+    private static final String PREF_KEY_MAP_MODE = "PREF_CHANGE_MAP_MODE";
 
     private static SharedPreferences settings = null;
     private static SharedPreferences.Editor editor = null;
@@ -52,6 +53,11 @@ public class PersistantStorageUtils {
             init();
         }
         return settings.getString( name, null );
+    }
+
+    public static Boolean getMapPreferences(Context ctx){
+        defaultPref = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return defaultPref.getBoolean(PREF_KEY_MAP_MODE, false);
     }
 
     public static String getLanguagePreferences(Context ctx){

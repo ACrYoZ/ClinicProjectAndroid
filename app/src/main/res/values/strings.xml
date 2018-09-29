@@ -40,8 +40,20 @@
     <string name="set_rating_en">Set your rating for docror:</string>
     <string name="rating_en">Rating:</string>
     <string name="about_doc_en">About Doctor:</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_extended_doctor_info">ExtendedDoctorInfoActivity</string>
+    <string name="about_clinic_en">About Clinic</string>
+    <string name="nearest_transport_en">Nearest transport:</string>
+    <string name="avaliable_phones_en">Avaliable phones:</string>
+    <string name="pref_category_extra_en">Extra</string>
+    <string name="pref_title_map_mode_en">Allow map gestures</string>
 
     //Значения на русском
+    <string name="pref_title_map_mode_ru">Включить управление жестами для карты</string>
+    <string name="pref_category_extra_ru">Дополнительные</string>
+    <string name="about_clinic_ru">О клинике</string>
+    <string name="nearest_transport_ru">Ближайший транспорт:</string>
+    <string name="avaliable_phones_ru">Номера телефонов:</string>
     <string name="pref_category_general_ru">Основные настройки</string>
     <string name="parlor_ru">Кабинет:</string>
     <string name="phone_ru">Телефон:</string>
@@ -83,8 +95,10 @@
     <string name="about_doc_ru">Информация о враче:</string>
 
 
+    //Ключи настроек
     <string name="change_lang_key">PREF_CHANGE_LANGUAGE</string>
     <string name="change_txt_size_key">PREF_CHANGE_TXT_SIZE</string>
+    <string name="change_map_mode_key">PREF_CHANGE_MAP_MODE</string>
 
 
     <string-array name="avaliable_languages">
@@ -107,8 +121,5 @@
         <item>20</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_extended_doctor_info">ExtendedDoctorInfoActivity</string>
 
 </resources>

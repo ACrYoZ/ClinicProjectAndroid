@@ -61,6 +61,7 @@ dependencies {
     //-- Material Calendar View --
 
     testImplementation 'junit:junit:4.12'
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

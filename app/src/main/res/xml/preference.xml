@@ -18,5 +18,17 @@
         android:key="@string/change_txt_size_key"
         android:summary="@string/pref_summary_text_size_en"
         android:title="@string/pref_title_text_size_en" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_category_extra_en"
+        android:key="ExtraCategoryKey">
+
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/change_map_mode_key"
+            android:title="@string/pref_title_map_mode_en" />
     </PreferenceCategory>
 </PreferenceScreen>

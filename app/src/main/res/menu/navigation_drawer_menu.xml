@@ -14,6 +14,10 @@
             android:id="@+id/nav_doctors"
             android:icon="@drawable/doctor_icon"
             android:title="@string/doctors_en"></item>
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/about_icon"
+            android:title="@string/about_clinic_en" />
         <item android:id="@+id/nav_settings"
         android:icon="@drawable/settings_icon"
         android:title="@string/settings_en"></item>

@@ -34,6 +34,7 @@ import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
 import com.clinic.myclinic.Utils.JSONParser;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
+import com.clinic.myclinic.Utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
@@ -66,7 +67,7 @@ public class UserProfileActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, clinicInfo;
 
     private Toolbar mToolbar;
 
@@ -134,6 +135,7 @@ public class UserProfileActivity extends AppCompatActivity
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
         myDoctors = navMenu.findItem(R.id.nav_doctors);
+        clinicInfo = navMenu.findItem(R.id.nav_info);
 
         //Если сеть есть - берем данные с сервера. Если сети нет - создаем "null" пользователя
         if(isOnline()) {
@@ -226,6 +228,12 @@ public class UserProfileActivity extends AppCompatActivity
         finish();
     }
 
+    private void startAboutActicity() {
+        Intent intent = new Intent(this, AboutClinicActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     //Если пользователь не авторизован - завершаем главную активность
     private void onLogout() {
         Intent login = new Intent(this, LoginActivity.class);
@@ -258,6 +266,8 @@ public class UserProfileActivity extends AppCompatActivity
             case R.id.nav_doctors:
                 startDoctorsActivity();
                 break;
+            case R.id.nav_info:
+                startAboutActicity();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user_profile);
@@ -296,6 +306,7 @@ public class UserProfileActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
+        clinicInfo.setTitle(R.string.about_clinic_ru);
     }
 
     @Override
@@ -310,6 +321,7 @@ public class UserProfileActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDoctors.setTitle(R.string.doctors_en);
+        clinicInfo.setTitle(R.string.about_clinic_en);
     }
 
     @Override
@@ -339,8 +351,8 @@ public class UserProfileActivity extends AppCompatActivity
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
-        int height = size.y;
+        int width = (int)Utils.convertPxToDp(this, size.x);
+        int height = (int)Utils.convertPxToDp(this, size.y);
 
         //!!! Важно !!!
         //Именно этот кусок кода, связанный с handler - позволяет работать с Picasso. Если убрать handler - то всё будет плачевно,
@@ -355,8 +367,10 @@ public class UserProfileActivity extends AppCompatActivity
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
-//                userPhoto.setScaleX(width/16);
-//                userPhoto.setScaleY(height/16);
+//                userPhoto.setScaleX(width);
+//                userPhoto.setScaleY(height);
+//
+//                userPhoto.requestLayout(); // перестраиваем элемент
 //
 //                userPhotoNavigationDrawer.setScaleX(width/19);
 //                userPhotoNavigationDrawer.setScaleY(height/19);
