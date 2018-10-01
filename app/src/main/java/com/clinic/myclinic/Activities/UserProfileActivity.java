@@ -137,6 +137,10 @@ public class UserProfileActivity extends AppCompatActivity
         myDoctors = navMenu.findItem(R.id.nav_doctors);
         clinicInfo = navMenu.findItem(R.id.nav_info);
 
+        //скрываем фото пользователя до его получения. Использую INVISIBLE т.к. он его просто не отображает, в то время как
+        //GONE - полностью прячет слой.
+        userPhoto.setVisibility(View.INVISIBLE);
+
         //Если сеть есть - берем данные с сервера. Если сети нет - создаем "null" пользователя
         if(isOnline()) {
             //Создание пользователя
@@ -396,6 +400,8 @@ public class UserProfileActivity extends AppCompatActivity
                 userMedication.setText(user.getUserMedication());
                 userNameNavigationDrawer.setText(user.getUserName() + " " + user.getUserPatronymic() + " " + user.getUserSurname());
                 userEmail.setText(user.getUserEmail());
+
+                userPhoto.setVisibility(View.VISIBLE);
             }
         });
     }

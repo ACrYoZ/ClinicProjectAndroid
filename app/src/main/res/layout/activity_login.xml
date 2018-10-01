@@ -10,19 +10,19 @@
 
     <ImageView
         android:id="@+id/imgLogo"
-        android:layout_width="117dp"
+        android:layout_width="wrap_content"
         android:layout_height="88dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="17dp"
-        android:layout_marginEnd="147dp"
-        android:layout_marginStart="147dp"
         android:layout_marginTop="54dp"
+        android:scaleX="2.2"
+        android:scaleY="2.2"
         app:layout_constraintBottom_toTopOf="@+id/edtUsername"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/heart" />
+        app:srcCompat="@drawable/main" />
 
     <EditText
         android:id="@+id/edtUsername"
@@ -37,6 +37,7 @@
         android:drawableLeft="@drawable/ic_action_name_dark"
         android:ems="10"
         android:hint="Username"
+        android:background="@drawable/login_text_views"
         android:inputType="textPersonName"
         android:textColor="@android:color/black"
         android:textColorHighlight="@color/colorLightBlue"
@@ -56,6 +57,7 @@
         android:layout_marginBottom="19dp"
         android:layout_marginEnd="99dp"
         android:layout_marginStart="99dp"
+        android:background="@drawable/login_text_views"
         android:layout_marginTop="13dp"
         android:drawableLeft="@drawable/ic_password_dark"
         android:ems="10"

@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clinic.myclinic.Adapters.RecordsAdapter;
+import com.clinic.myclinic.Classes.Record;
 import com.clinic.myclinic.Classes.Records;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.Interfaces.SettingsInterface;
@@ -35,11 +35,15 @@ import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
 
 import es.dmoral.toasty.Toasty;
 
 import com.clinic.myclinic.Interfaces.onCircleButtonClickListener;
+
+import java.util.ArrayList;
 
 public class RecordsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, onCircleButtonClickListener, SettingsInterface
@@ -61,7 +65,9 @@ public class RecordsActivity extends AppCompatActivity
     ImageView userPhotoNavigationDrawer;
     TextView userEmail, userNameNavigationDrawer;
     ListView lvRecords;
-    FloatingActionButton fab;
+
+    FloatingActionButton fab_add, fab_add_by_pref;
+    FloatingActionMenu fab_menu;
 
     //Объявляем пользователя
     User user = null;
@@ -87,6 +93,7 @@ public class RecordsActivity extends AppCompatActivity
 
             //Создание списка записей пользователя
             records = new Records(this);
+
             records.setOnRecordsDataReceived(this);
             records.onRecordsDataReceivedUpdateComponents();
 
@@ -150,13 +157,20 @@ public class RecordsActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Получаем FAB
-        fab = findViewById(R.id.fab_add);
+        //Получаем FABs и menu
+        fab_add = findViewById(R.id.fab_add_new_rec_item);
+        fab_add_by_pref = findViewById(R.id.fab_add_new_rec_by_prefers_item);
 
-        //Устанавливаем слушателя клика по нашей FAB
-        fab.setOnClickListener(v -> {
+        fab_menu = findViewById(R.id.fab_add_menu);
+
+        fab_add.setOnClickListener(v -> {
             startAddNewRecordActivity();
         });
+
+        fab_add_by_pref.setOnClickListener(v -> {
+            startAddNewRecordActivityByPrefs();
+        });
+
 
         //Устанавливаем актуальный язык
         switch (language) {
@@ -167,6 +181,12 @@ public class RecordsActivity extends AppCompatActivity
                 setEnglishLocale();
                 break;
         }
+    }
+
+    //TODO(programmer): must be complete!
+    private void startAddNewRecordActivityByPrefs() {
+        Intent intent = new Intent(this, AddPrefRecord.class);
+        startActivity(intent);
     }
 
     private void startAddNewRecordActivity() {
@@ -273,6 +293,9 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
+
+        fab_add.setLabelText(getString(R.string.fab_add_new_record_ru));
+        fab_add_by_pref.setLabelText(getString(R.string.fab_add_record_by_personal_prefers_ru));
     }
 
     @Override
@@ -282,6 +305,9 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDoctors.setTitle(R.string.doctors_en);
+
+        fab_add.setLabelText(getString(R.string.fab_add_new_record_en));
+        fab_add_by_pref.setLabelText(getString(R.string.fab_add_record_by_personal_prefers_en));
     }
 
     @Override
@@ -303,12 +329,12 @@ public class RecordsActivity extends AppCompatActivity
                     adapter.setOnCircleButtonClickListener(RecordsActivity.this);
                     lvRecords.setAdapter(adapter);
 
-                    //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убералась
+                    //Устанавливаем слушателей прокрутки, для того, чтобы FAB автоматически убиралась
                     lvRecords.setOnScrollListener(new AbsListView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(AbsListView view, int scrollState) {
                             if (scrollState == SCROLL_STATE_IDLE) {
-                                fab.animate().scaleX(1f).scaleY(1f).start();
+                                fab_menu.showMenu(true);
                                 flag = true;
                             }
                         }
@@ -316,7 +342,7 @@ public class RecordsActivity extends AppCompatActivity
                         @Override
                         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                             if (flag) {
-                                fab.animate().scaleX(0f).scaleY(0f).start();
+                                fab_menu.hideMenu(true);
                                 flag = false;
                             }
                         }

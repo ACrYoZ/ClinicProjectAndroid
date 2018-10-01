@@ -53,7 +53,6 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
     ArrayList<Doctor> doctors = null;
     ArrayList<String> categories = null;
     ArrayList<String> names = null;
-    int doc_position;
 
     //поля callback
     private static onCategoriesDataReceived categoriesDataReceived;
@@ -63,6 +62,11 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
         context = ctx;
         doctors = new ArrayList<Doctor>();
         new GetDoctorsTask().execute();
+        initCategories();
+    }
+
+    public Doctors(ArrayList<Doctor> doctors){
+        this.doctors = doctors;
         initCategories();
     }
 
@@ -207,8 +211,7 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
         return Integer.toString(id);
     }
 
-    public String[] getTimeDuty(String doc_name, int doc_postition) {
-        this.doc_position = doc_postition;
+    public String[] getTimeDuty(String doc_name) {
 
         Doctor doc;
         ArrayList<String> newTimeDutyList = new ArrayList<String>();
@@ -249,14 +252,11 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
         return newTimeDutyList.toArray(newtimes);
     }
 
-    public String[] getDateDuty(String doc_name, int doc_postition, Context ctx) {
-        this.doc_position = doc_postition;
+    public String[] getDateDuty(String doc_name, String language) {
 
         Doctor doc;
         ArrayList<String> newDateDutyList = new ArrayList<String>();
         String[] newdates = new String[newDateDutyList.size()];
-
-        String language = PersistantStorageUtils.getLanguagePreferences(ctx);
 
         for (Doctor f : doctors) {
             if (f.getName().equals(doc_name)) {

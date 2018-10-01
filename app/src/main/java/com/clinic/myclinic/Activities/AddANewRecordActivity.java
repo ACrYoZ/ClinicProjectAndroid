@@ -219,7 +219,11 @@ public class AddANewRecordActivity extends AppCompatActivity
             super.onPreExecute();
 
             pDialog = new ProgressDialog(AddANewRecordActivity.this);
-            pDialog.setMessage("Отправка. Подождите...");
+            if (language.equals("ru")){
+                pDialog.setMessage(getString(R.string.send_info_ru));
+            } else {
+                pDialog.setMessage(getString(R.string.send_info_en));
+            }
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -329,14 +333,14 @@ public class AddANewRecordActivity extends AppCompatActivity
 
     private void setAdapterForDateSelectionSP(String doc_name, int pos) {
         //Адаптер для даты
-        ArrayAdapter<String> adapterDates = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getDateDuty(doc_name, pos, this));
+        ArrayAdapter<String> adapterDates = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getDateDuty(doc_name, language));
         adapterDates.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDateSelecter.setAdapter(adapterDates);
     }
 
     private void setAdapterForTimeSelectionSP(String doc_name, int pos) {
         //Адаптер для времени
-        ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getTimeDuty(doc_name, pos));
+        ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, doctors.getTimeDuty(doc_name));
         adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spTimeSelecter.setAdapter(adapterTimes);
     }

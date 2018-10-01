@@ -48,8 +48,24 @@
     <string name="pref_category_extra_en">Extra</string>
     <string name="pref_title_map_mode_en">Allow map gestures</string>
     <string name="search_text_en">Search</string>
+    <string name="fab_add_new_record_en">New record</string>
+    <string name="fab_add_record_by_personal_prefers_en">New record at passend time</string>
+    <string name="select_date_btn_en">Select date</string>
+    <string name="select_time_btn_en">Select time</string>
+    <string name="warning_time_en">Minutes which you select must be 00</string>
+    <string name="create_the_record_en">Create the record?</string>
+    <string name="send_info_en">Sending data. Please wait.</string>
+    <string name="you_cant_do_it_en">Sorry, but you can\'t do it</string>
 
     //Значения на русском
+    <string name="you_cant_do_it_ru">Удаленная запись недоступна</string>
+    <string name="send_info_ru">Отправка данных. Пожалуйста подождите.</string>
+    <string name="create_the_record_ru">Создать запись?</string>
+    <string name="warning_time_ru">Минуты должны быть 00</string>
+    <string name="select_date_btn_ru">Выбрать дату</string>
+    <string name="select_time_btn_ru">Выбрать время</string>
+    <string name="fab_add_new_record_ru">Новая запись</string>
+    <string name="fab_add_record_by_personal_prefers_ru">Новая запись по предпочтению</string>
     <string name="search_text_ru">Поиск</string>
     <string name="pref_title_map_mode_ru">Включить управление жестами для карты</string>
     <string name="pref_category_extra_ru">Дополнительные</string>

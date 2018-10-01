@@ -65,6 +65,26 @@ public class Records implements onRecordsDataReceived {
         new GetRecordsTask().execute();
     }
 
+    public Records(){
+        records = new ArrayList<Record>();
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));records.add(new Record("asda", "fga", "flsjf", 2));records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));records.add(new Record("asda", "fga", "flsjf", 2));records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));records.add(new Record("asda", "fga", "flsjf", 2));records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+        records.add(new Record("asda", "fga", "flsjf", 2));
+    }
+
     @Nullable
     public ArrayList<Record> getRecords() { return records; }
 

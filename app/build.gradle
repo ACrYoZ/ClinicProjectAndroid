@@ -52,9 +52,17 @@ dependencies {
     implementation 'com.android.support:design:27.1.0'
     //-- Navigation Drawer --
 
+    //Floating action button with menu
+    implementation 'com.github.clans:fab:1.6.4'
+    //Floating action button with menu
+
     //-- Apache --
     implementation 'org.apache.httpcomponents:httpcore:4.4.1'
     //-- Apache --
+
+    //--Date-Time picker
+    implementation 'com.wdullaer:materialdatetimepicker:3.6.4'
+    //--Date-Time picker
 
     //-- Material Calendar View --
     //implementation 'com.github.prolificinteractive:material-calendarview:1.6.0'
