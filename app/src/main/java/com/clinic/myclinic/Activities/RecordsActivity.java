@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -53,7 +55,7 @@ public class RecordsActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, navInfo;
 
     private Toolbar mToolbar;
 
@@ -152,6 +154,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
         myDoctors = navMenu.findItem(R.id.nav_doctors);
+        navInfo = navMenu.findItem(R.id.nav_info);
 
         navView.setNavigationItemSelectedListener(this);
 
@@ -251,11 +254,20 @@ public class RecordsActivity extends AppCompatActivity
             case R.id.nav_settings:
                 startSettingsActivity();
                 break;
+            case R.id.nav_info:
+                startAboutActicity();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_records);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startAboutActicity() {
+        Intent intent = new Intent(this, AboutClinicActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void startDoctorsInfoActivity() {
@@ -268,6 +280,15 @@ public class RecordsActivity extends AppCompatActivity
     @Override
     public void onCircleButtonClick(View view, final int position) {
         if(records.removeRecordAt(position, user.getId(), user.getCountDisagree(), language, getWindow().getDecorView().getRootView())) {
+
+            //Создаем анимацию удаления
+            Animation anim = AnimationUtils.loadAnimation(
+                    RecordsActivity.this, android.R.anim.fade_out
+            );
+            anim.setDuration(500);
+
+            lvRecords.getChildAt(position).startAnimation(anim );
+
             adapter = new RecordsAdapter(this, R.layout.list_records_adapter_layout, records.getRecords());
             adapter.notifyDataSetChanged();
             lvRecords.setAdapter(adapter);
@@ -293,6 +314,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
+        navInfo.setTitle(R.string.about_clinic_ru);
 
         fab_add.setLabelText(getString(R.string.fab_add_new_record_ru));
         fab_add_by_pref.setLabelText(getString(R.string.fab_add_record_by_personal_prefers_ru));
@@ -305,6 +327,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDoctors.setTitle(R.string.doctors_en);
+        navInfo.setTitle(R.string.about_clinic_en);
 
         fab_add.setLabelText(getString(R.string.fab_add_new_record_en));
         fab_add_by_pref.setLabelText(getString(R.string.fab_add_record_by_personal_prefers_en));

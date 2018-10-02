@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context=".Activities.AddPrefRecord">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@color/White"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:alpha="0.8"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/half_heart_2_min" />
+
+            <TextView
+                android:id="@+id/txtRecordText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/fab_add_new_record_en"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:alpha="0.6"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/new_record_ic" />
+        </android.support.constraint.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:minHeight="70dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:minHeight="40dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtSelectCategory1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/simple_text_views_aqua_and_prizm"
+                    android:minHeight="40dp"
+                    android:text="@string/select_category_en" />
+
+                <Spinner
+                    android:id="@+id/spSCateg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="25dp"
+                    android:padding="5dp"
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:minHeight="40dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSelectDate"
+                    style="@android:style/Widget.Holo.Button.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorLightBlue"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/select_date_btn_en" />
+
+                <TextView
+                    android:id="@+id/txtSDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/simple_text_views"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:minHeight="40dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSelectTime"
+                    style="@android:style/Widget.Holo.Button.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorLightBlue"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/select_time_btn_en" />
+
+                <TextView
+                    android:id="@+id/txtSTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/simple_text_views"
+                    android:textAlignment="center" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSearch"
+                style="@android:style/Widget.Holo.Button.Small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:background="@color/colorLightBlue"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/search_text_en" />
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/lvAvaliableDoctors"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:divider="@color/White" />
+
+</LinearLayout>

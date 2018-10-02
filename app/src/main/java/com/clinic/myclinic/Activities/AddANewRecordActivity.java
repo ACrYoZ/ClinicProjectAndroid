@@ -65,7 +65,7 @@ public class AddANewRecordActivity extends AppCompatActivity
     private static final String TAG_ANNOTATION = "annotation";
     private static final int MAX_DISAGREES = 15;
 
-    TextView txtSelectCategory, txtSelectDoctor, txtSelectDate, txtSelectTime;
+    TextView txtSelectCategory, txtSelectDoctor, txtSelectDate, txtSelectTime, txtAnnotation, txtRecord;
     Spinner spCategory, spDoctors, spTimeSelecter, spDateSelecter;
     EditText edtAnnotation;
     Button  btnConfirm;
@@ -86,6 +86,8 @@ public class AddANewRecordActivity extends AppCompatActivity
         txtSelectDoctor = findViewById(R.id.txtSelectDoctor);
         txtSelectDate = findViewById(R.id.txtSelectedDate);
         txtSelectTime = findViewById(R.id.txtSelectedTime);
+        txtRecord = findViewById(R.id.txtRecordText);
+        txtAnnotation = findViewById(R.id.txtCauseText);
         spCategory = findViewById(R.id.spCategory);
         spDoctors = findViewById(R.id.spDoctors);
         spTimeSelecter = findViewById(R.id.spTimeSelecter);
@@ -96,6 +98,11 @@ public class AddANewRecordActivity extends AppCompatActivity
         spTimeSelecter.setEnabled(false);
         spDoctors.setEnabled(false);
         spDateSelecter.setEnabled(false);
+
+        spCategory.setBackgroundColor(Color.WHITE);
+        spDoctors.setBackgroundColor(Color.WHITE);
+        spTimeSelecter.setBackgroundColor(Color.WHITE);
+        spDateSelecter.setBackgroundColor(Color.WHITE);
 
         //Получаем актуальный язык
         language = PersistantStorageUtils.getLanguagePreferences(this);
@@ -188,7 +195,9 @@ public class AddANewRecordActivity extends AppCompatActivity
         txtSelectDoctor.setText(R.string.select_the_doctor_ru);
         txtSelectDate.setText(R.string.selected_date_ru);
         txtSelectTime.setText(R.string.selected_time_ru);
-        edtAnnotation.setHint(R.string.cause_ru);
+        edtAnnotation.setHint(R.string.cause_txt_ru);
+        txtAnnotation.setText(R.string.cause_ru);
+        txtRecord.setText(R.string.fab_add_new_record_ru);
         btnConfirm.setText(R.string.confirm_ru);
     }
 
@@ -198,7 +207,9 @@ public class AddANewRecordActivity extends AppCompatActivity
         txtSelectDoctor.setText(R.string.select_the_doctor_en);
         txtSelectDate.setText(R.string.selected_date_en);
         txtSelectTime.setText(R.string.selected_time_en);
-        edtAnnotation.setHint(R.string.cause_en);
+        edtAnnotation.setHint(R.string.cause_txt_en);
+        txtAnnotation.setText(R.string.cause_en);
+        txtRecord.setText(R.string.fab_add_new_record_ru);
         btnConfirm.setText(R.string.confirm_en);
     }
 
@@ -209,6 +220,7 @@ public class AddANewRecordActivity extends AppCompatActivity
         txtSelectDate.setTextSize(Integer.parseInt(textSize));
         txtSelectTime.setTextSize(Integer.parseInt(textSize));
         edtAnnotation.setTextSize(Integer.parseInt(textSize));
+        txtRecord.setTextSize(Integer.parseInt(textSize));
         btnConfirm.setTextSize(Integer.parseInt(textSize));
     }
 

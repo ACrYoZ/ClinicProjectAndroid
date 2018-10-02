@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:id="@+id/drawer_layout_records"
     tools:context=".Activities.RecordsActivity">
 
@@ -19,7 +20,9 @@
     <ListView
         android:id="@+id/lvRecords"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@color/White"
+        android:dividerHeight="0dp"/>
 
     </LinearLayout>
 
@@ -29,20 +32,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/fab_add"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBottom="@id/container_body"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_gravity="bottom|right"-->
-            <!--android:layout_marginBottom="6dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:src="@drawable/ic_add_black_24dp"-->
-            <!--app:backgroundTint="@color/colorPrimaryDark"-->
-
-            <!--app:fabSize="normal"-->
-            <!--app:rippleColor="@color/colorLightBlue" />-->
         
         <com.github.clans.fab.FloatingActionMenu
             android:layout_width="wrap_content"

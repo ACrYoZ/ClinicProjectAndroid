@@ -19,7 +19,7 @@
     <string name="accept_en">Accept</string>
     <string name="cancel_en">Cancel</string>
     <string name="select_the_doctor_en">Select the doctor:</string>
-    <string name="cause_en">Annotation:</string>
+    <string name="cause_en">Annotation</string>
     <string name="select_date_en">Select date</string>
     <string name="select_avaliable_time_en">Select time:</string>
     <string name="confirm_en">Confirm</string>
@@ -56,8 +56,12 @@
     <string name="create_the_record_en">Create the record?</string>
     <string name="send_info_en">Sending data. Please wait.</string>
     <string name="you_cant_do_it_en">Sorry, but you can\'t do it</string>
+    <string name="cause_txt_en">Describe your problem...</string>
+    <string name="doctor_wasnt_founded_en">Any doctor wasn\'t found</string>
 
     //Значения на русском
+    <string name="doctor_wasnt_founded_ru">Не найдено ни одного врача</string>
+    <string name="cause_txt_ru">Опишите вашу проблему...</string>
     <string name="you_cant_do_it_ru">Удаленная запись недоступна</string>
     <string name="send_info_ru">Отправка данных. Пожалуйста подождите.</string>
     <string name="create_the_record_ru">Создать запись?</string>

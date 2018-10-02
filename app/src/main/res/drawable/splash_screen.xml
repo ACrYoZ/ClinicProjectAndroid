@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/colorLightLightBlue"></item>
+
+    <item>
+        <bitmap android:src="@drawable/icon_diagnosis"
+            android:gravity="center"></bitmap>
+    </item>
+
+</layer-list>

@@ -65,7 +65,7 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
     JSONParser jsonParser = new JSONParser();
 
     Button btnSelectDate, btnSelectTime, btnSearch;
-    TextView txtDate, txtTime;
+    TextView txtDate, txtTime, txtRecordText, txtSelectCategory;
     Spinner spCategory;
     ListView lvAvaliableDoctors;
 
@@ -106,12 +106,30 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
 
         txtDate = findViewById(R.id.txtSDate);
         txtTime = findViewById(R.id.txtSTime);
+        txtRecordText = findViewById(R.id.txtRecordText1);
+        txtSelectCategory = findViewById(R.id.txtSelectCategory1);
 
         spCategory = findViewById(R.id.spSCateg);
 
+        spCategory.setBackgroundColor(Color.WHITE);
+
         lvAvaliableDoctors = findViewById(R.id.lvAvaliableDoctors);
 
-        //TODO(programmer): реализовать передачу данных в активность AddNewRecord
+        language = PersistantStorageUtils.getLanguagePreferences(this);
+
+        switch (language){
+            case "ru":
+                setRussianLocale();
+                break;
+            case "en":
+                setEnglishLocale();
+                break;
+        }
+
+        textSize = PersistantStorageUtils.getTextSizePreferences(this);
+
+        setTextSize();
+
         lvAvaliableDoctors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -232,6 +250,13 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
                     }//for
                 }//if
             }//for
+            if(docs_tmp.size() == 0) {
+                if(language.equals("en")) {
+                    Snackbar.make(v, R.string.doctor_wasnt_founded_en, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(v, R.string.doctor_wasnt_founded_ru, Snackbar.LENGTH_SHORT).show();
+                }
+            }
         }//if
         filteredDocs = new Doctors(docs_tmp);
 
@@ -272,7 +297,11 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
             time = Integer.toString(hourOfDay) + ":00:00";
         }
         if (minute != 0) {
-            Toasty.warning(ctx, getString(R.string.warning_time_en), Toast.LENGTH_SHORT, true).show();
+            if(language.equals("en")) {
+                Toasty.warning(ctx, getString(R.string.warning_time_en), Toast.LENGTH_SHORT, true).show();
+            } else {
+                Toasty.warning(ctx, getString(R.string.warning_time_ru), Toast.LENGTH_SHORT, true).show();
+            }
         }
         txtTime.setText(time);
     }
@@ -313,6 +342,8 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
         btnSelectTime.setText(R.string.select_time_btn_ru);
         btnSelectDate.setText(R.string.select_date_btn_ru);
         btnSearch.setText(R.string.search_text_ru);
+        txtSelectCategory.setText(R.string.select_category_ru);
+        txtRecordText.setText(R.string.fab_add_new_record_ru);
     }
 
     @Override
@@ -320,6 +351,8 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
         btnSelectTime.setText(R.string.select_time_btn_en);
         btnSelectDate.setText(R.string.select_date_btn_en);
         btnSearch.setText(R.string.search_text_en);
+        txtSelectCategory.setText(R.string.select_category_en);
+        txtRecordText.setText(R.string.fab_add_new_record_en);
     }
 
     @Override
@@ -327,6 +360,8 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
         btnSearch.setTextSize(Integer.parseInt(textSize));
         btnSelectTime.setTextSize(Integer.parseInt(textSize));
         btnSelectDate.setTextSize(Integer.parseInt(textSize));
+        txtSelectCategory.setTextSize(Integer.parseInt(textSize));
+        txtRecordText.setTextSize(Integer.parseInt(textSize));
     }
 
     private class sendRecData extends AsyncTask<String, String, String> {

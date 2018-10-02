@@ -53,7 +53,7 @@ public class AboutDoctorActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, navInfo;
 
     private Toolbar mToolbar;
 
@@ -145,6 +145,7 @@ public class AboutDoctorActivity extends AppCompatActivity
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
         myDoctors = navMenu.findItem(R.id.nav_doctors);
+        navInfo = navMenu.findItem(R.id.nav_info);
 
         navView.setNavigationItemSelectedListener(this);
 
@@ -167,6 +168,7 @@ public class AboutDoctorActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDoctors.setTitle(R.string.doctors_en);
+        navInfo.setTitle(R.string.about_clinic_en);
     }
 
     private void setRussianLocale() {
@@ -175,6 +177,7 @@ public class AboutDoctorActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
+        navInfo.setTitle(R.string.about_clinic_ru);
     }
 
     @Override
@@ -197,11 +200,20 @@ public class AboutDoctorActivity extends AppCompatActivity
             case R.id.nav_settings:
                 startSettingsActivity();
                 break;
+            case R.id.nav_info:
+                startAboutActicity();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_doctors);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startAboutActicity() {
+        Intent intent = new Intent(this, AboutClinicActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override
