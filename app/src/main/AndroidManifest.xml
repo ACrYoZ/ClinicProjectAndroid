@@ -57,7 +57,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".Activities.AboutClinicActivity" />
-        <activity android:name=".Activities.AddPrefRecord"></activity>
+        <activity android:name=".Activities.AddPrefRecord" />
+        <activity android:name=".Activities.DiagnosisListActivity"></activity>
     </application>
 
 </manifest>

@@ -6,7 +6,7 @@
     <string name="adress_en">Adress:</string>
     <string name="diagnosis_en">Diagnosis:</string>
     <string name="medication_en">Medication:</string>
-    <string name="schedule_en">My schedule</string>
+    <string name="schedule_en">Make an appointment</string>
     <string name="my_profile_en">My profile</string>
     <string name="records_en">My records</string>
     <string name="settings_en">Settings</string>
@@ -58,8 +58,10 @@
     <string name="you_cant_do_it_en">Sorry, but you can\'t do it</string>
     <string name="cause_txt_en">Describe your problem...</string>
     <string name="doctor_wasnt_founded_en">Any doctor wasn\'t found</string>
+    <string name="diagnoses_en">Diagnoses</string>
 
-    //Значения на русском
+    //Значения на русском]
+    <string name="diagnoses_ru">Диагнозы</string>
     <string name="doctor_wasnt_founded_ru">Не найдено ни одного врача</string>
     <string name="cause_txt_ru">Опишите вашу проблему...</string>
     <string name="you_cant_do_it_ru">Удаленная запись недоступна</string>
@@ -95,7 +97,7 @@
     <string name="adress_ru">Адрес:</string>
     <string name="diagnosis_ru">Диагноз:</string>
     <string name="medication_ru">Лечение:</string>
-    <string name="schedule_ru">Мое расписание</string>
+    <string name="schedule_ru">Запись на прием</string>
     <string name="my_profile_ru">Мой профиль</string>
     <string name="records_ru">Мои записи</string>
     <string name="settings_ru">Настройки</string>

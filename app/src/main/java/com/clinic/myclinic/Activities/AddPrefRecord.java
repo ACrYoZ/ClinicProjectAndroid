@@ -400,8 +400,10 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
                 // отправляем информацию через запрос HTTP POST
                 JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_record, "GET", params);
 
-                // ответ от json о записи
-                Log.d("AddRecord Json", jsonRecord.toString());
+                if(jsonRecord != null) {
+                    // ответ от json о записи
+                    Log.d("AddRecord Json", jsonRecord.toString());
+                }
 
                 if(language.equals("en")) {
                     Snackbar snackbar = Snackbar.make(v, R.string.record_sending_en, Snackbar.LENGTH_SHORT);

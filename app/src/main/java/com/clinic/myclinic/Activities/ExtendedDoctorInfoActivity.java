@@ -211,28 +211,30 @@ public class ExtendedDoctorInfoActivity extends AppCompatActivity {
                 // постим информацию через запрос HTTP POST
                 JSONObject jsonResponce = jsonParser.makeHttpRequest(url_get_doctor_description, "GET", params);
 
-                // ответ от json о записях
-                Log.d("AboutResponce", jsonResponce.toString());
+                if(jsonResponce != null) {
+                    // ответ от json о записях
+                    Log.d("AboutResponce", jsonResponce.toString());
 
-                // json success tag
-                success = jsonResponce.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    Handler uiHandler = new Handler(Looper.getMainLooper());
-                    uiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                txtAboutDoctor.setText(jsonResponce.getString(TAG_ABOUT));
-                            } catch (JSONException e){
-                                e.printStackTrace();
+                    // json success tag
+                    success = jsonResponce.getInt(TAG_SUCCESS);
+                    if (success == 1) {
+                        Handler uiHandler = new Handler(Looper.getMainLooper());
+                        uiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    txtAboutDoctor.setText(jsonResponce.getString(TAG_ABOUT));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    Log.d("AboutResponce:", "true");
-                } else {
-                    Log.d("AboutResponce:", "false");
-                }
+                        Log.d("AboutResponce:", "true");
+                    } else {
+                        Log.d("AboutResponce:", "false");
+                    }
+                }//if != null
             } catch (JSONException e) {
                 e.printStackTrace();
             }

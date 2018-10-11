@@ -179,32 +179,34 @@ public class User implements onUserDataReceived {
                 JSONObject json = jsonParser.makeHttpRequest(url_get_patient_data, "GET", params);
 
                 // ответ от json о пользователе
-                Log.d("User Data Json", json.toString());
+                if(json != null) {
+                    Log.d("User Data Json", json.toString());
 
-                // json success tag
-                success = json.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    // если получили информацию о пользователе
-                    JSONArray userObj = json.getJSONArray(TAG_USER);
+                    // json success tag
+                    success = json.getInt(TAG_SUCCESS);
+                    if (success == 1) {
+                        // если получили информацию о пользователе
+                        JSONArray userObj = json.getJSONArray(TAG_USER);
 
-                    // получим первый объект из массива JSON Array и установим необходимые поля
-                    JSONObject user = userObj.getJSONObject(0);
-                    id = user.getInt(TAG_UID);
-                    userEmail = AuthorizationUtils.getEmail(context);
-                    userAge = user.getString(TAG_AGE);
-                    userAdress = user.getString(TAG_ADRESS);
-                    userPhoto = user.getString(TAG_CONTENT);
-                    userName = user.getString(TAG_NAME);
-                    userSurname = user.getString(TAG_SURNAME);
-                    countDisagree = user.getInt(TAG_COUNT_DISAGREE);
-                    userPatronymic = user.getString(TAG_PATRONYMIC);
-                    userMedication = user.getString(TAG_MEDICATION);
-                    userDiagnosis = user.getString(TAG_DIAGNOSIS);
+                        // получим первый объект из массива JSON Array и установим необходимые поля
+                        JSONObject user = userObj.getJSONObject(0);
+                        id = user.getInt(TAG_UID);
+                        userEmail = AuthorizationUtils.getEmail(context);
+                        userAge = user.getString(TAG_AGE);
+                        userAdress = user.getString(TAG_ADRESS);
+                        userPhoto = user.getString(TAG_CONTENT);
+                        userName = user.getString(TAG_NAME);
+                        userSurname = user.getString(TAG_SURNAME);
+                        countDisagree = user.getInt(TAG_COUNT_DISAGREE);
+                        userPatronymic = user.getString(TAG_PATRONYMIC);
+                        userMedication = user.getString(TAG_MEDICATION);
+                        userDiagnosis = user.getString(TAG_DIAGNOSIS);
 
-                    dataReceived.onUserDataReceivedUpdateComponents();
-                } else {
-                    // не нашли пользователя
-                }
+                        dataReceived.onUserDataReceivedUpdateComponents();
+                    } else {
+                        // не нашли пользователя
+                    }
+                }//if != null
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }

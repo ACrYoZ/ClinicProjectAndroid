@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.clinic.myclinic.Classes.DiagnosisList;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.Interfaces.SettingsInterface;
 import com.clinic.myclinic.Interfaces.onUserDataReceived;
@@ -67,7 +68,7 @@ public class UserProfileActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, clinicInfo;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, clinicInfo, myDiagnoses;
 
     private Toolbar mToolbar;
 
@@ -134,6 +135,7 @@ public class UserProfileActivity extends AppCompatActivity
         mylogout = navMenu.findItem(R.id.nav_logout);
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
+        myDiagnoses = navMenu.findItem(R.id.nav_my_diagnoses);
         myDoctors = navMenu.findItem(R.id.nav_doctors);
         clinicInfo = navMenu.findItem(R.id.nav_info);
 
@@ -238,6 +240,12 @@ public class UserProfileActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    private void startDiagnosesActivity(){
+        Intent intent = new Intent(this, DiagnosisListActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     //Если пользователь не авторизован - завершаем главную активность
     private void onLogout() {
         Intent login = new Intent(this, LoginActivity.class);
@@ -260,6 +268,9 @@ public class UserProfileActivity extends AppCompatActivity
                 break;
             case R.id.nav_my_schedules:
                 startRecordsActivity();
+                break;
+            case R.id.nav_my_diagnoses:
+                startDiagnosesActivity();
                 break;
             case R.id.nav_logout:
                 onLogout();
@@ -308,6 +319,7 @@ public class UserProfileActivity extends AppCompatActivity
         myacc.setTitle(R.string.my_profile_ru);
         mylogout.setTitle(R.string.logout_ru);
         myschedule.setTitle(R.string.schedule_ru);
+        myDiagnoses.setTitle(R.string.diagnoses_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
         clinicInfo.setTitle(R.string.about_clinic_ru);
@@ -322,6 +334,7 @@ public class UserProfileActivity extends AppCompatActivity
 
         myacc.setTitle(R.string.my_profile_en);
         mylogout.setTitle(R.string.logout_en);
+        myDiagnoses.setTitle(R.string.diagnoses_en);
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDoctors.setTitle(R.string.doctors_en);
@@ -419,8 +432,10 @@ public class UserProfileActivity extends AppCompatActivity
                 // отправляем информацию через запрос HTTP POST
                 JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_fcm_token, "GET", params);
 
-                // ответ от json о записи
-                Log.d("fcm", jsonRecord.toString());
+                if(jsonRecord != null) {
+                    // ответ от json о записи
+                    Log.d("fcm", jsonRecord.toString());
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

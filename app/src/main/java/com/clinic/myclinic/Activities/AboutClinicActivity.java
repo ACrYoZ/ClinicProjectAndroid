@@ -1,6 +1,9 @@
 package com.clinic.myclinic.Activities;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -61,8 +64,10 @@ public class AboutClinicActivity extends FragmentActivity implements OnMapReadyC
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //Начинаем получение данных о клинике
-        new GetClinicInfo().execute();
+        if(isOnline()) { 
+            //Начинаем получение данных о клинике
+            new GetClinicInfo().execute();
+        }
 
         txtPhones = findViewById(R.id.txtAvaliablePhones);
         txtTransport = findViewById(R.id.txtNearestTransport);
@@ -142,28 +147,37 @@ public class AboutClinicActivity extends FragmentActivity implements OnMapReadyC
                 // получаем информацию через запрос HTTP GET
                 JSONObject jsonAboutClinic = jsonParser.makeHttpRequest(url_get_clinic_info, "GET", params);
 
-                // ответ от json о записях
-                Log.d("ClinicInfo arr Json", jsonAboutClinic.toString());
+                if(jsonAboutClinic != null) {
+                    // ответ от json о записях
+                    Log.d("ClinicInfo arr Json", jsonAboutClinic.toString());
 
 
-                 JSONArray clinicObj = jsonAboutClinic.getJSONArray(TAG_CLINIC);
+                    JSONArray clinicObj = jsonAboutClinic.getJSONArray(TAG_CLINIC);
 
-                 for (int i = 0; i < clinicObj.length(); i++) {
-                    // получим первый объект из массива JSON Array и установим необходимые поля
-                    JSONObject categ = clinicObj.getJSONObject(i);
+                    for (int i = 0; i < clinicObj.length(); i++) {
+                        // получим первый объект из массива JSON Array и установим необходимые поля
+                        JSONObject categ = clinicObj.getJSONObject(i);
 
-                    //получаем данные из массива и записываем их в отдельную переменную
-                    lat = categ.getLong(TAG_LATITUDE);
-                    longit = categ.getLong(TAG_LONGITUDE);
-                    trans = categ.getString(TAG_TRANSPORT);
-                    phone = categ.getString(TAG_PHONE);
-                 }
-                 setData();
+                        //получаем данные из массива и записываем их в отдельную переменную
+                        lat = categ.getLong(TAG_LATITUDE);
+                        longit = categ.getLong(TAG_LONGITUDE);
+                        trans = categ.getString(TAG_TRANSPORT);
+                        phone = categ.getString(TAG_PHONE);
+                    }
+                    setData();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             return null;
         }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private void setData() {

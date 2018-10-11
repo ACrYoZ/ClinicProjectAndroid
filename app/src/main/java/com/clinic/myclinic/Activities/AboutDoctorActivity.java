@@ -53,7 +53,7 @@ public class AboutDoctorActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private NavigationView navView;
     private Menu navMenu;
-    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, navInfo;
+    private MenuItem myacc, myschedule, mysettings, mylogout, myDoctors, navInfo, myDiagnoses;
 
     private Toolbar mToolbar;
 
@@ -145,6 +145,7 @@ public class AboutDoctorActivity extends AppCompatActivity
         myschedule = navMenu.findItem(R.id.nav_my_schedules);
         mysettings = navMenu.findItem(R.id.nav_settings);
         myDoctors = navMenu.findItem(R.id.nav_doctors);
+        myDiagnoses = navMenu.findItem(R.id.nav_my_diagnoses);
         navInfo = navMenu.findItem(R.id.nav_info);
 
         navView.setNavigationItemSelectedListener(this);
@@ -164,6 +165,7 @@ public class AboutDoctorActivity extends AppCompatActivity
 
     private void setEnglishLocale() {
         myacc.setTitle(R.string.my_profile_en);
+        myDiagnoses.setTitle(R.string.diagnoses_en);
         mylogout.setTitle(R.string.logout_en);
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
@@ -175,9 +177,16 @@ public class AboutDoctorActivity extends AppCompatActivity
         myacc.setTitle(R.string.my_profile_ru);
         mylogout.setTitle(R.string.logout_ru);
         myschedule.setTitle(R.string.schedule_ru);
+        myDiagnoses.setTitle(R.string.diagnoses_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
         navInfo.setTitle(R.string.about_clinic_ru);
+    }
+
+    private void startDiagnosesActivity(){
+        Intent intent = new Intent(this, DiagnosisListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -196,6 +205,9 @@ public class AboutDoctorActivity extends AppCompatActivity
                 onLogout();
                 break;
             case R.id.nav_doctors:
+                break;
+            case R.id.nav_my_diagnoses:
+                startDiagnosesActivity();
                 break;
             case R.id.nav_settings:
                 startSettingsActivity();

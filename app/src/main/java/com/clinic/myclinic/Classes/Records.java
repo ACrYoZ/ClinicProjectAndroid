@@ -102,31 +102,33 @@ public class Records implements onRecordsDataReceived {
                 // получаем информацию через запрос HTTP GET
                 JSONObject jsonRecords = jsonParser.makeHttpRequest(url_get_records, "GET", params);
 
-                // ответ от json о записях
-                Log.d("User Records Json", jsonRecords.toString());
+                if (jsonRecords != null) {
+                    // ответ от json о записях
+                    Log.d("User Records Json", jsonRecords.toString());
 
-                // json success tag
-                success = jsonRecords.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    // если получили записи
-                    JSONArray recordsObj = jsonRecords.getJSONArray(TAG_RECORDS);
+                    // json success tag
+                    success = jsonRecords.getInt(TAG_SUCCESS);
+                    if (success == 1) {
+                        // если получили записи
+                        JSONArray recordsObj = jsonRecords.getJSONArray(TAG_RECORDS);
 
-                    for (int i = 0; i < recordsObj.length(); i++) {
-                        // получим первый объект из массива JSON Array и установим необходимые поля
-                        JSONObject user = recordsObj.getJSONObject(i);
+                        for (int i = 0; i < recordsObj.length(); i++) {
+                            // получим первый объект из массива JSON Array и установим необходимые поля
+                            JSONObject user = recordsObj.getJSONObject(i);
 
-                        //получаем данные из массива и записываем их в отдельную переменную
-                        String name = user.getString(TAG_NAME);
-                        String patronymic = user.getString(TAG_PATRONYMIC);
-                        String surname = user.getString(TAG_SURNAME);
-                        String annotation = user.getString(TAG_ANNOTATION);
-                        String date = user.getString(TAG_DATE);
-                        int id = user.getInt(TAG_RID);
+                            //получаем данные из массива и записываем их в отдельную переменную
+                            String name = user.getString(TAG_NAME);
+                            String patronymic = user.getString(TAG_PATRONYMIC);
+                            String surname = user.getString(TAG_SURNAME);
+                            String annotation = user.getString(TAG_ANNOTATION);
+                            String date = user.getString(TAG_DATE);
+                            int id = user.getInt(TAG_RID);
 
-                        records.add(new Record(name + " " + patronymic + " " + surname, annotation, date, id));
-                    }
-                    dataReceived.onRecordsDataReceivedUpdateComponents();
-                } else {}
+                            records.add(new Record(name + " " + patronymic + " " + surname, annotation, date, id));
+                        }
+                        dataReceived.onRecordsDataReceivedUpdateComponents();
+                    } else {}
+                }//if != null
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }
@@ -187,14 +189,19 @@ public class Records implements onRecordsDataReceived {
                 JSONObject jsonRecords = jsonParser.makeHttpRequest(url_remove_record, "POST", params);
 
                 String message = jsonRecords.getString(TAG_MESSAGE);
-                // ответ от json о записях
-                Log.d("Remove Records JSON", message);
 
-                // json success tag
-                success = jsonRecords.getInt(TAG_SUCCESS);
-                if (success == 1) {
+                if(jsonRecords != null) {
+                    // ответ от json о записях
+                    Log.d("Remove Records JSON", message);
+
+                    // json success tag
+                    success = jsonRecords.getInt(TAG_SUCCESS);
+                    if (success == 1) {
                         Log.i("SERVER: ", "Your record successfully removed");
-                    } else { Log.e("SERVER: ", "Something went wrong...");}
+                    } else {
+                        Log.e("SERVER: ", "Something went wrong...");
+                    }
+                }//if != null
             } catch (JSONException e) { e.printStackTrace(); }
             return null;
         }

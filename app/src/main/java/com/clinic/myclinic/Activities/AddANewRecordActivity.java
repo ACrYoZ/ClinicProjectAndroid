@@ -249,7 +249,7 @@ public class AddANewRecordActivity extends AppCompatActivity
                 sb.append(getRightDate(spDateSelecter.getSelectedItem().toString()));
             } else { sb.append(spDateSelecter.getSelectedItem().toString()); }
 
-            sb.append(" " + spTimeSelecter.getSelectedItem().toString());
+            sb.append(" " + spTimeSelecter.getSelectedItem().toString() + ":" + "00");
             String docName = spDoctors.getSelectedItem().toString();
 
             try {
@@ -265,8 +265,10 @@ public class AddANewRecordActivity extends AppCompatActivity
                 // отправляем информацию через запрос HTTP POST
                 JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_record, "GET", params);
 
-                // ответ от json о записи
-                Log.d("AddRecord Json", jsonRecord.toString());
+                if(jsonRecord != null) {
+                    // ответ от json о записи
+                    Log.d("AddRecord Json", jsonRecord.toString());
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

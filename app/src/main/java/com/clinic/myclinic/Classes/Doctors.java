@@ -27,7 +27,6 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
 
     //адрес
     private static String url_get_doctors = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_doctors.php";
-    private static String url_get_doctors_expanded = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_doctors_expanded.php";
     private static String url_get_categories = "http://" + UserProfileActivity.SERVER + "/AndroidScripts/get_categories.php";
 
     //теги узлов JSON
@@ -87,34 +86,36 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
                 // ответ от json о записях
                 Log.d("Doctors arr Json", jsonDoctors.toString());
 
-                // json success tag
-                success = jsonDoctors.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    // если получили записи
-                    JSONArray doctorsObj = jsonDoctors.getJSONArray(TAG_DOCTORS);
+                if(jsonDoctors != null) {
+                    // json success tag
+                    success = jsonDoctors.getInt(TAG_SUCCESS);
+                    if (success == 1) {
+                        // если получили записи
+                        JSONArray doctorsObj = jsonDoctors.getJSONArray(TAG_DOCTORS);
 
-                    for (int i = 0; i < doctorsObj.length(); i++) {
-                        // получим первый объект из массива JSON Array и установим необходимые поля
-                        JSONObject doctor = doctorsObj.getJSONObject(i);
+                        for (int i = 0; i < doctorsObj.length(); i++) {
+                            // получим первый объект из массива JSON Array и установим необходимые поля
+                            JSONObject doctor = doctorsObj.getJSONObject(i);
 
-                        //получаем данные из массива и записываем их в отдельную переменную
-                        int id = Integer.parseInt(doctor.getString(TAG_DID));
-                        String name = doctor.getString(TAG_NAME);
-                        String patronymic = doctor.getString(TAG_PATRONYMIC);
-                        String surname = doctor.getString(TAG_SURNAME);
-                        String phone = doctor.getString(TAG_PHONE);
-                        String photo = doctor.getString(TAG_PHOTO_URL);
-                        String pos = doctor.getString(TAG_POSITION);
-                        String parlor = doctor.getString(TAG_PARLOR);
-                        double rating = doctor.getDouble(TAG_RATING);
-                        String duty_from = doctor.getString(TAG_DUTY_FROM);
-                        String duty_to = doctor.getString(TAG_DUTY_TO);
+                            //получаем данные из массива и записываем их в отдельную переменную
+                            int id = Integer.parseInt(doctor.getString(TAG_DID));
+                            String name = doctor.getString(TAG_NAME);
+                            String patronymic = doctor.getString(TAG_PATRONYMIC);
+                            String surname = doctor.getString(TAG_SURNAME);
+                            String phone = doctor.getString(TAG_PHONE);
+                            String photo = doctor.getString(TAG_PHOTO_URL);
+                            String pos = doctor.getString(TAG_POSITION);
+                            String parlor = doctor.getString(TAG_PARLOR);
+                            double rating = doctor.getDouble(TAG_RATING);
+                            String duty_from = doctor.getString(TAG_DUTY_FROM);
+                            String duty_to = doctor.getString(TAG_DUTY_TO);
 
-                        doctors.add(new Doctor(id,  name + " " + patronymic + " " + surname, pos, phone, photo, duty_from, duty_to, rating, parlor));
-                    }
-                } else {
-                }
-                doctorsDataReceived.onDoctorsDataReceivedUpdateComponents();
+                            doctors.add(new Doctor(id, name + " " + patronymic + " " + surname, pos, phone, photo, duty_from, duty_to, rating, parlor));
+                        }
+                    } else {}
+
+                    doctorsDataReceived.onDoctorsDataReceivedUpdateComponents();
+                }//if != null
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -122,45 +123,47 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
         }
     }
 
-    // AsyncTask для получения данных о категориях
-    private class GetCategoriesTask extends AsyncTask<String, String, String> {
+        // AsyncTask для получения данных о категориях
+        private class GetCategoriesTask extends AsyncTask<String, String, String> {
 
-        protected String doInBackground(String... args) {
-            // проверяем тег success
-            int success;
-            try {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
+            protected String doInBackground(String... args) {
+                // проверяем тег success
+                int success;
+                try {
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-                // получаем информацию через запрос HTTP GET
-                JSONObject jsonCategorie = jsonParser.makeHttpRequest(url_get_categories, "GET", params);
+                    // получаем информацию через запрос HTTP GET
+                    JSONObject jsonCategorie = jsonParser.makeHttpRequest(url_get_categories, "GET", params);
 
-                // ответ от json о записях
-                Log.d("Categories arr Json", jsonCategorie.toString());
+                    // ответ от json о записях
+                    Log.d("Categories arr Json", jsonCategorie.toString());
 
-                // json success tag
-                success = jsonCategorie.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    // если получили записи
-                    JSONArray categorieObj = jsonCategorie.getJSONArray(TAG_CATEGORIES);
+                    // json success tag
+                    success = jsonCategorie.getInt(TAG_SUCCESS);
+                    if (success == 1) {
+                        // если получили записи
+                        JSONArray categorieObj = jsonCategorie.getJSONArray(TAG_CATEGORIES);
 
-                    for (int i = 0; i < categorieObj.length(); i++) {
-                        // получим первый объект из массива JSON Array и установим необходимые поля
-                        JSONObject categ = categorieObj.getJSONObject(i);
+                        for (int i = 0; i < categorieObj.length(); i++) {
+                            // получим первый объект из массива JSON Array и установим необходимые поля
+                            JSONObject categ = categorieObj.getJSONObject(i);
 
-                        //получаем данные из массива и записываем их в отдельную переменную
-                        String categorieName = categ.getString(TAG_CATEG_NAME);
+                            //получаем данные из массива и записываем их в отдельную переменную
+                            String categorieName = categ.getString(TAG_CATEG_NAME);
 
-                        categories.add(categorieName);
+                            if(!categorieName.equals("Администратор")) {
+                                categories.add(categorieName);
+                            }
+                        }
+                    } else {
                     }
-                } else {
+                    categoriesDataReceived.onCategoriesDataReceivedUpdateComponents();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                categoriesDataReceived.onCategoriesDataReceivedUpdateComponents();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                return null;
             }
-            return null;
         }
-    }
 
     public ArrayList<Doctor> getDoctors() {
         return doctors;
@@ -239,9 +242,11 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
                 for (int i = toi-1; i >= fromi; i--) {
                         sb = new StringBuilder();
                         if(i < 10){
-                            sb.append("0" + i + ":" + "00" + ":" + "00");
+                            //sb.append("0" + i + ":" + "00" + ":" + "00");
+                            sb.append("0" + i + ":" + "00");
                         } else {
-                            sb.append(i + ":" + "00" + ":" + "00");
+                            //sb.append(i + ":" + "00" + ":" + "00");
+                            sb.append(i + ":" + "00");
                         }
 
                         newTimeDutyList.add(sb.toString());

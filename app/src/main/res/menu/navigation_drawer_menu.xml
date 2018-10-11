@@ -11,6 +11,10 @@
         android:title="@string/schedule_en"></item>
 
         <item
+            android:id="@+id/nav_my_diagnoses"
+            android:icon="@drawable/diagnoses"
+            android:title="@string/diagnoses_en" />
+        <item
             android:id="@+id/nav_doctors"
             android:icon="@drawable/doctor_icon"
             android:title="@string/doctors_en"></item>
