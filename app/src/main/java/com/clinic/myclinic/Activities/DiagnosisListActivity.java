@@ -292,6 +292,7 @@ public class DiagnosisListActivity extends AppCompatActivity  implements Navigat
             @Override
             public void run() {
                 if (diagnoses != null) {
+                    diagnoses.sort();
                     adapter = new DiagnosesAdapter(DiagnosisListActivity.this, R.layout.list_diagnoses_adapter, diagnoses.getDiagnoses());
 
                     lvDiagnoses = findViewById(R.id.lvDiagnosis);

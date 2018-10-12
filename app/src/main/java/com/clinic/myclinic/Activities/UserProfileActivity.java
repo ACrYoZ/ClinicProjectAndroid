@@ -1,7 +1,10 @@
 package com.clinic.myclinic.Activities;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
@@ -27,12 +30,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clinic.myclinic.Classes.DiagnosisList;
+import com.clinic.myclinic.Classes.Doctor;
+import com.clinic.myclinic.Classes.Doctors;
 import com.clinic.myclinic.Classes.User;
 import com.clinic.myclinic.Interfaces.SettingsInterface;
+import com.clinic.myclinic.Interfaces.onCategoriesDataReceived;
+import com.clinic.myclinic.Interfaces.onDoctorsDataReceived;
 import com.clinic.myclinic.Interfaces.onUserDataReceived;
 import com.clinic.myclinic.R;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
 import com.clinic.myclinic.Utils.CircularTransformation;
+import com.clinic.myclinic.Utils.DBHelper;
 import com.clinic.myclinic.Utils.JSONParser;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
 import com.clinic.myclinic.Utils.Utils;
@@ -42,6 +50,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +59,9 @@ import es.dmoral.toasty.Toasty;
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         SettingsInterface,
-        onUserDataReceived {
+        onUserDataReceived,
+        onCategoriesDataReceived,
+        onDoctorsDataReceived {
 
     public final static String SERVER = "myclinic.ddns.net:8080";
 
@@ -60,6 +71,18 @@ public class UserProfileActivity extends AppCompatActivity
     private static final String TAG_PID = "pid";
 
     JSONParser jsonParser = new JSONParser();
+
+    //Объект локальной бд
+    DBHelper dbHelper;
+    //Объект управления локальной бд
+    SQLiteDatabase database;
+    //Объект добавляемых данных в локальную бд
+    ContentValues values;
+
+    //Объект докторов
+    Doctors doctors;
+
+    Context ctx;
 
     public  String language;
     public  String textSize;
@@ -86,9 +109,10 @@ public class UserProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        ctx = this;
+
         //Получаем актуальный язык
         language = PersistantStorageUtils.getLanguagePreferences(this);
-
 
         //Проверка. Авторизован ли пользователь? Нет? Выходим на активность входа.
         if (!AuthorizationUtils.isAuthorized(this)) {
@@ -149,6 +173,11 @@ public class UserProfileActivity extends AppCompatActivity
             user = new User(this);
             user.setOnDataReceived(this);
             user.onUserDataReceivedUpdateComponents();
+
+            doctors = new Doctors(this);
+            doctors.setOnDoctorsDataReceived(this);
+            doctors.onDoctorsDataReceivedUpdateComponents();
+            doctors.setOnCategoriesDataReceived(this::onDoctorsDataReceivedUpdateComponents);
 
             //Уведомляем пользователя о том, что мы получаем данные и ему необходимо подождать.
             switch (language) {
@@ -417,6 +446,56 @@ public class UserProfileActivity extends AppCompatActivity
                 userPhoto.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void onCategoriesDataReceivedUpdateComponents() {}
+
+    @Override
+    public void onDoctorsDataReceivedUpdateComponents() {
+        new workWithDBAsycnc().execute();
+    }
+
+    private class workWithDBAsycnc extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            //Если бд существует - сносим её.
+            if(ctx.getDatabasePath(dbHelper.DB_NAME) != null){
+                ctx.deleteDatabase(dbHelper.DB_NAME);
+            }
+
+            //Создаем объект
+            dbHelper = new DBHelper(ctx);
+            //Получаем доступ к базе. Writable - потому как нам нужен полный доступ. По чтению и записи.
+            database = dbHelper.getWritableDatabase();
+
+            //очищаем бд
+            database.delete(dbHelper.DB_DOCTORS_TABLE, null, null);
+
+            //Создаем объект передаваемых данных
+            values = new ContentValues();
+
+            if(dbHelper != null && values != null && database != null){
+                ArrayList<Doctor> docs = doctors.getDoctors();
+
+                //Записываем данные в специальный объект
+                for(Doctor doc : docs) {
+                    values.put(dbHelper.KEY_NAME, doc.getName());
+                    values.put(dbHelper.KEY_POSITION, doc.getPosition());
+                    values.put(dbHelper.KEY_PHONE, doc.getPhone());
+                    values.put(dbHelper.KEY_PHOTO, doc.getPhotoURL());
+                    values.put(dbHelper.KEY_RATING, doc.getRating());
+                    values.put(dbHelper.KEY_PARLOR, doc.getParlor());
+                    values.put(dbHelper.KEY_FROM, doc.getFrom());
+                    values.put(dbHelper.KEY_TO, doc.getTo());
+                    //Добавляем данные в таблицу
+                    database.insert(DBHelper.DB_DOCTORS_TABLE, null, values);
+                }
+            }
+            return null;
+        }
     }
 
     private class sendToken extends AsyncTask<String, String, String> {

@@ -119,6 +119,27 @@ public class AboutDoctorActivity extends AppCompatActivity
                 });
                 snackbar.show();
             }
+
+            doctors = new Doctors(this, true);
+
+            if (doctors != null){
+                adapter = new DoctorsAdapter(AboutDoctorActivity.this, R.layout.list_doctors_adapter_layout, doctors.getDoctors());
+
+                lvDoctors = findViewById(R.id.lvDoctors);
+
+                lvDoctors.setAdapter(adapter);
+
+                lvDoctors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        TextView txt_phone = view.findViewById(R.id.txtPhoneCard);
+                        String phone = txt_phone.getText().toString();
+
+                        startAboutDocActivity(doctors.getDoctorByPhone(phone));
+                    }
+                });
+            }
+
         }
         //Устанавливаем toolbar
         mToolbar = findViewById(R.id.nav_action);

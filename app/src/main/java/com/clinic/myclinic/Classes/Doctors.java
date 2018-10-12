@@ -1,6 +1,8 @@
 package com.clinic.myclinic.Classes;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -8,6 +10,7 @@ import com.clinic.myclinic.Activities.UserProfileActivity;
 import com.clinic.myclinic.Interfaces.onCategoriesDataReceived;
 import com.clinic.myclinic.Interfaces.onDoctorsDataReceived;
 import com.clinic.myclinic.Utils.AuthorizationUtils;
+import com.clinic.myclinic.Utils.DBHelper;
 import com.clinic.myclinic.Utils.JSONParser;
 import com.clinic.myclinic.Utils.PersistantStorageUtils;
 
@@ -53,6 +56,11 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
     ArrayList<String> categories = null;
     ArrayList<String> names = null;
 
+    //Объект локальной бд
+    DBHelper dbHelper;
+    //Объект управления локальной бд
+    SQLiteDatabase database;
+
     //поля callback
     private static onCategoriesDataReceived categoriesDataReceived;
     private static onDoctorsDataReceived doctorsDataReceived;
@@ -62,6 +70,50 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
         doctors = new ArrayList<Doctor>();
         new GetDoctorsTask().execute();
         initCategories();
+    }
+
+    //boolean is_local - используется для разделения двух конструкторов, т.е. если я буду использовать только ctx - то возникнет
+    //конфликт
+    public Doctors(Context ctx, boolean is_local){
+        doctors = new ArrayList<Doctor>();
+
+        dbHelper = new DBHelper(ctx);
+        database = dbHelper.getReadableDatabase();
+
+        Cursor cursor = database.query(DBHelper.DB_DOCTORS_TABLE,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null);
+
+
+        if(cursor.moveToFirst()){
+            //Получаем индексы колонок в бд
+            int idIndex = cursor.getColumnIndex(dbHelper.KEY_ID);
+            int nameIndex = cursor.getColumnIndex(dbHelper.KEY_NAME);
+            int posIndex = cursor.getColumnIndex(dbHelper.KEY_POSITION);
+            int phoneIndex = cursor.getColumnIndex(dbHelper.KEY_PHONE);
+            int photoIndex = cursor.getColumnIndex(dbHelper.KEY_PHOTO);
+            int ratingIndex = cursor.getColumnIndex(dbHelper.KEY_RATING);
+            int parlIndex = cursor.getColumnIndex(dbHelper.KEY_PARLOR);
+            int fromIndex = cursor.getColumnIndex(dbHelper.KEY_FROM);
+            int toIndex = cursor.getColumnIndex(dbHelper.KEY_TO);
+
+            //Создаем список докторов исходя из локальной базы
+            do{
+                doctors.add(new Doctor(cursor.getInt(idIndex),
+                                       cursor.getString(nameIndex),
+                                       cursor.getString(posIndex),
+                                       cursor.getString(phoneIndex),
+                                       cursor.getString(photoIndex),
+                                       cursor.getString(fromIndex),
+                                       cursor.getString(toIndex),
+                                       cursor.getDouble(ratingIndex),
+                                       cursor.getString(parlIndex)));
+            }while (cursor.moveToNext());
+        }
     }
 
     public Doctors(ArrayList<Doctor> doctors){
@@ -177,6 +229,10 @@ public class Doctors implements onDoctorsDataReceived, onCategoriesDataReceived 
     public String[] getCategories() {
         String[] arr = new String[categories.size()];
         return categories.toArray(arr);
+    }
+
+    public ArrayList<String> getCategoriesArrayList() {
+        return categories;
     }
 
     public String[] getNames(String categorie) {

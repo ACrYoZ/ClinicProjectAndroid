@@ -13,7 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DiagnosisList implements onDiagnosesDataReceived {
@@ -53,6 +57,13 @@ public class DiagnosisList implements onDiagnosesDataReceived {
         diagnosesDataReceived = received;
     }
 
+    public void sort(){
+        Collections.sort(diagnoses, new Comparator<Diagnosis>() {
+            public int compare(Diagnosis o1, Diagnosis o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
+    }
 
     // AsyncTask для получения данных о диагнозах
     private class GetDiagnosisTask extends AsyncTask<String, String, String> {

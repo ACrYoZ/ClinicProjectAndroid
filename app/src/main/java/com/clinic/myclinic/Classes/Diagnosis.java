@@ -1,6 +1,7 @@
 package com.clinic.myclinic.Classes;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.clinic.myclinic.Activities.UserProfileActivity;
@@ -14,7 +15,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Diagnosis {
+public class Diagnosis implements Comparable<Diagnosis>{
 
     String diagnosis;
     String date;
@@ -38,5 +39,10 @@ public class Diagnosis {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(@NonNull Diagnosis o) {
+        return getDate().compareTo(o.getDate());
     }
 }

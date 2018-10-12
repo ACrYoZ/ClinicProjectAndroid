@@ -65,7 +65,7 @@ public class RecordsActivity extends AppCompatActivity
 
     //Объявляем компоненты интерфейса
     ImageView userPhotoNavigationDrawer;
-    TextView userEmail, userNameNavigationDrawer;
+    TextView userEmail, userNameNavigationDrawer, recordsText;
     ListView lvRecords;
 
     FloatingActionButton fab_add, fab_add_by_pref;
@@ -141,6 +141,8 @@ public class RecordsActivity extends AppCompatActivity
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        recordsText = findViewById(R.id.txtRecordsText);
 
         //получаем ссылки на элементы с header
         View hView = navView.getHeaderView(0);
@@ -323,6 +325,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
+        recordsText.setText(R.string.diagnoses_ru);
         myDiagnoses.setTitle(R.string.diagnoses_ru);
         navInfo.setTitle(R.string.about_clinic_ru);
 
@@ -337,6 +340,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDiagnoses.setTitle(R.string.diagnoses_en);
+        recordsText.setText(R.string.diagnoses_en);
         myDoctors.setTitle(R.string.doctors_en);
         navInfo.setTitle(R.string.about_clinic_en);
 
