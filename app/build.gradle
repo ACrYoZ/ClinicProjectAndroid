@@ -6,8 +6,8 @@ android {
         applicationId "com.clinic.myclinic"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 8
-        versionName "8.0"
+        versionCode 9
+        versionName "9.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
