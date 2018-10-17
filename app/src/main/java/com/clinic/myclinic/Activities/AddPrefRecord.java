@@ -1,7 +1,9 @@
 package com.clinic.myclinic.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.icu.util.TimeUnit;
@@ -14,10 +16,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,15 +75,15 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
 
     private ProgressDialog pDialog;
 
-    Context ctx;
-    View v;
+    Context ctx;    //вспомогательная переменная
+    View v;         //вспомогательная переменная
 
-    Calendar now = Calendar.getInstance();
+    Calendar now = Calendar.getInstance(); //получение текущей даты
 
     String date, time;
 
     Doctors doctors;
-    Doctors filteredDocs;
+    Doctors filteredDocs;   //вспомогательный объект докторов
     Doctor doc;
 
     User user;
@@ -88,6 +92,8 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
 
     String language;
     String textSize;
+
+    String cause;           //Переменная для хранения текста обращения к врачу из диалогово окна
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +148,55 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
                         Snackbar snackbar = Snackbar.make(v, R.string.create_the_record_en, Snackbar.LENGTH_INDEFINITE);
                         snackbar.setActionTextColor(Color.WHITE);
                         snackbar.setAction("OK", vl -> {
-                            new sendRecData().execute();
+                            //Начинаем колдовать над диалоговым окном
+                            LayoutInflater li = LayoutInflater.from(AddPrefRecord.this);
+                            //Получаем view с файла dialog_cause_layout.xml, который применим для диалогового окна:
+                            View dialView = li.inflate(R.layout.dialog_cause_layout, null);
+
+                            //Создаем AlertDialog
+                            AlertDialog.Builder causeBuilder = new AlertDialog.Builder(AddPrefRecord.this);
+
+                            //Настраиваем dialog_cause_layout.xml для нашего AlertDialog:
+                            causeBuilder.setView(dialView);
+
+                            //Настраиваем отображение поля для ввода текста в открытом диалоге:
+                            TextView txtCause = dialView.findViewById(R.id.txtCauseDialog);
+                            EditText edtCause = dialView.findViewById(R.id.edtCauseDialog);
+
+                            //Устанавливаем русский язык
+                            txtCause.setText(R.string.cause_en);
+                            edtCause.setHint(R.string.cause_txt_en);
+
+                            //Настраиваем сообщение в диалоговом окне:
+                            causeBuilder
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    //Если причина обращения заполнена хотябы на 5 символов - пропускаем. Если нет - сообщаем.
+                                                    if(txtCause.length() >= 5) {
+                                                        cause = edtCause.getText().toString();
+                                                        new sendRecData().execute();
+                                                    } else{
+                                                        Snackbar snack = Snackbar.make(v, R.string.exception_on_add_rec_en, Snackbar.LENGTH_LONG);
+                                                        snack.setActionTextColor(Color.WHITE);
+                                                        snack.show();
+                                                    }//else-if
+                                                }//onClick
+                                            })//PositiveButton
+                                    .setNegativeButton("Cancel",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }//onClick
+                                            });//NegativeButton
+
+                            //Создаем AlertDialog
+                            AlertDialog alertDialog = causeBuilder.create();
+                            alertDialog.show();
+
                             snackbar.dismiss();
                         });
                         snackbar.show();
@@ -150,7 +204,55 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
                         Snackbar snackbar = Snackbar.make(v, R.string.create_the_record_ru, Snackbar.LENGTH_INDEFINITE);
                         snackbar.setActionTextColor(Color.WHITE);
                         snackbar.setAction("OK", vl -> {
-                            new sendRecData().execute();
+                            //Начинаем колдовать над диалоговым окном
+                            LayoutInflater li = LayoutInflater.from(AddPrefRecord.this);
+                            //Получаем view с файла dialog_cause_layout.xml, который применим для диалогового окна:
+                            View dialView = li.inflate(R.layout.dialog_cause_layout, null);
+
+                            //Создаем AlertDialog
+                            AlertDialog.Builder causeBuilder = new AlertDialog.Builder(AddPrefRecord.this);
+
+                            //Настраиваем dialog_cause_layout.xml для нашего AlertDialog:
+                            causeBuilder.setView(dialView);
+
+                            //Настраиваем отображение поля для ввода текста в открытом диалоге:
+                            TextView txtCause = dialView.findViewById(R.id.txtCauseDialog);
+                            EditText edtCause = dialView.findViewById(R.id.edtCauseDialog);
+
+                            //Устанавливаем русский язык
+                            txtCause.setText(R.string.cause_ru);
+                            edtCause.setHint(R.string.cause_txt_ru);
+
+                            //Настраиваем сообщение в диалоговом окне:
+                            causeBuilder
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    //Если причина обращения заполнена хотябы на 5 символов - пропускаем. Если нет - сообщаем.
+                                                    if(txtCause.length() >= 5) {
+                                                        cause = edtCause.getText().toString();
+                                                        new sendRecData().execute();
+                                                    } else{
+                                                        Snackbar snack = Snackbar.make(v, R.string.exception_on_add_rec_ru, Snackbar.LENGTH_LONG);
+                                                        snack.setActionTextColor(Color.WHITE);
+                                                        snack.show();
+                                                    }//else-if
+                                                }//onClick
+                                            })//PositiveButton
+                                    .setNegativeButton("Cancel",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }//onClick
+                                            });//NegativeButton
+
+                            //Создаем AlertDialog
+                            AlertDialog alertDialog = causeBuilder.create();
+                            alertDialog.show();
+
                             snackbar.dismiss();
                         });
                         snackbar.show();
@@ -197,10 +299,6 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
             tpd.show(getFragmentManager(), "");
         });
 
-        btnSearch.setOnClickListener(v -> {
-            beginSearch();
-        });
-
         if (isOnline()) {
             doctors = new Doctors(this);
             doctors.setOnDoctorsDataReceived(this);
@@ -209,6 +307,10 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
             doctors.onCategoriesDataReceivedUpdateComponents();
 
             user = new User(this);
+
+            btnSearch.setOnClickListener(v -> {
+                beginSearch();
+            });
 
         } else {
             if (language.equals("ru")) {
@@ -292,9 +394,9 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
     @Override
     public void onTimeSet(com.wdullaer.materialdatetimepicker.time.TimePickerDialog view, int hourOfDay, int minute, int second) {
         if (hourOfDay < 10) {
-            time = "0" + Integer.toString(hourOfDay) + ":00:00";
+            time = "0" + Integer.toString(hourOfDay) + ":00";
         } else {
-            time = Integer.toString(hourOfDay) + ":00:00";
+            time = Integer.toString(hourOfDay) + ":00";
         }
         if (minute != 0) {
             if(language.equals("en")) {
@@ -385,7 +487,7 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
 
             StringBuilder date_time = new StringBuilder();
 
-            date_time.append(date).append(" " + time);
+            date_time.append(date).append(" " + time + ":00");
 
             try {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -395,7 +497,7 @@ public class AddPrefRecord extends AppCompatActivity implements DatePickerDialog
                 params.add(new BasicNameValuePair(TAG_PID, Integer.toString(user.getId())));
                 params.add(new BasicNameValuePair(TAG_DATE, date_time.toString()));
                 params.add(new BasicNameValuePair(TAG_PASSED, "0"));
-                params.add(new BasicNameValuePair(TAG_ANNOTATION, "No annotation"));
+                params.add(new BasicNameValuePair(TAG_ANNOTATION, cause));
 
                 // отправляем информацию через запрос HTTP POST
                 JSONObject jsonRecord = jsonParser.makeHttpRequest(url_send_record, "GET", params);

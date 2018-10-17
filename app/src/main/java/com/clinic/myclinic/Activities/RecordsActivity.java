@@ -325,7 +325,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_ru);
         mysettings.setTitle(R.string.settings_ru);
         myDoctors.setTitle(R.string.doctors_ru);
-        recordsText.setText(R.string.diagnoses_ru);
+        recordsText.setText(R.string.records_ru);
         myDiagnoses.setTitle(R.string.diagnoses_ru);
         navInfo.setTitle(R.string.about_clinic_ru);
 
@@ -340,7 +340,7 @@ public class RecordsActivity extends AppCompatActivity
         myschedule.setTitle(R.string.schedule_en);
         mysettings.setTitle(R.string.settings_en);
         myDiagnoses.setTitle(R.string.diagnoses_en);
-        recordsText.setText(R.string.diagnoses_en);
+        recordsText.setText(R.string.records_en);
         myDoctors.setTitle(R.string.doctors_en);
         navInfo.setTitle(R.string.about_clinic_en);
 

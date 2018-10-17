@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtCauseDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/simple_text_views_aqua_and_prizm"
+        android:fontFamily="@font/roboto_thin"
+        android:minHeight="40dp"
+        android:text="@string/cause_en"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edtCauseDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/simple_white_and_prizm"
+        android:ems="10"
+        android:hint="@string/cause_txt_en"
+        android:inputType="textLongMessage"
+        android:minHeight="80dp"
+        android:singleLine="false"
+        android:textSize="14sp" />
+</LinearLayout>

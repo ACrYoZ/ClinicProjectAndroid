@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -249,7 +250,7 @@ public class AddANewRecordActivity extends AppCompatActivity
                 sb.append(getRightDate(spDateSelecter.getSelectedItem().toString()));
             } else { sb.append(spDateSelecter.getSelectedItem().toString()); }
 
-            sb.append(" " + spTimeSelecter.getSelectedItem().toString() + ":" + "00");
+            sb.append(" " + spTimeSelecter.getSelectedItem().toString() + ":00");
             String docName = spDoctors.getSelectedItem().toString();
 
             try {
@@ -286,6 +287,7 @@ public class AddANewRecordActivity extends AppCompatActivity
         }
     }
 
+    @NonNull
     private String getRightDate(String datefull) {
         StringBuilder sb = new StringBuilder();
         String date = datefull.substring(0, 2);

@@ -466,7 +466,7 @@ public class UserProfileActivity extends AppCompatActivity
                 ctx.deleteDatabase(dbHelper.DB_NAME);
             }
 
-            //Создаем объект
+            //Создаем объект бд и саму базу данных
             dbHelper = new DBHelper(ctx);
             //Получаем доступ к базе. Writable - потому как нам нужен полный доступ. По чтению и записи.
             database = dbHelper.getWritableDatabase();
